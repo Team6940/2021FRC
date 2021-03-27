@@ -14,9 +14,12 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Add your docs here.
@@ -28,6 +31,8 @@ public class Drive extends SubsystemBase {
   public WPI_TalonFX m_rghtFollower;
 
   public DifferentialDrive m_diffDrive;
+
+  public NetworkTable m_limTable;
 
   public Joystick m_joystick;
 
@@ -43,6 +48,8 @@ public class Drive extends SubsystemBase {
   
     m_diffDrive = Robot.hardware.m_diffDrive;
     m_joystick = Robot.m_oi.m_stickL;
+    m_limTable = NetworkTableInstance.getDefault().getTable("limelight");
+    m_diffDrive.setMaxOutput(speed1);
 
   }
 
@@ -57,6 +64,9 @@ public class Drive extends SubsystemBase {
   }
 
   public void DriveCar(double x,double z,boolean qt){
+
+    SmartDashboard.putNumber("x", x);
+    SmartDashboard.putNumber("z", z);
 
     /* get gamepad stick values */
    double forw = 0.5*-1 * x; /* positive is forward */
