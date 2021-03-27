@@ -65,10 +65,10 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
 
-    Robot.hardware = new Hardware();
-    Robot.m_Drive = new Drive();
-    Robot.m_autoCommand = new DriveCmd();
-    Robot.m_oi = new OI();
+    hardware = new Hardware();
+    m_Drive = new Drive();
+    m_autoCommand = new DriveCmd();
+    m_oi = new OI();
 
   }
 
