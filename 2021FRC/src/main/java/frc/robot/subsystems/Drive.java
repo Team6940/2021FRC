@@ -69,8 +69,8 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("z", z);
 
     /* get gamepad stick values */
-   double forw = 0.5*-1 * x; /* positive is forward */
-   double turn = 0.5*+1 * z; /* positive is right */
+   double forw = -1 * x; /* positive is forward */
+   double turn = +1 * z; /* positive is right */
 
 
    /* If you want to set advanced speed , add speed1 or speed2 in the front*/
