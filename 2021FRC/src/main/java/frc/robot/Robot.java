@@ -34,9 +34,7 @@ package frc.robot;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
-
 import edu.wpi.first.wpilibj.TimedRobot;
-
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 
@@ -66,9 +64,10 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
 
     hardware = new Hardware();
+    m_oi = new OI();
     m_Drive = new Drive();
     m_autoCommand = new DriveCmd();
-    m_oi = new OI();
+
 
   }
 
