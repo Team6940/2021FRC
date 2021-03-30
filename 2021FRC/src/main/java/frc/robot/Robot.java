@@ -67,6 +67,7 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
     m_Drive = new Drive();
     m_autoCommand = new DriveCmd();
+    m_oi.init();
 
 
   }
