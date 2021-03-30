@@ -22,7 +22,7 @@ public class setFastCmd extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Robot.m_Drive.setFast();
+    //Robot.m_Drive.setFast();
     //todo
   }
 
