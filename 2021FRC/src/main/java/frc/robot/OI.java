@@ -27,10 +27,13 @@ public class OI {
   public OI(){
     JoystickButton fastButton = new JoystickButton(m_stickL, 3);
     JoystickButton slowButton = new JoystickButton(m_stickL, 4);
-
+  }
+public init(){
+   
     fastButton.whenPressed(new setFastCmd());
     slowButton.whenPressed(new setSlowCmd());
-  }
+}
+
   // There are a few additional built in buttons you can use. Additionally,
   // by subclassing Button you can create custom triggers and bind those to
   // commands the same as any other Button.
