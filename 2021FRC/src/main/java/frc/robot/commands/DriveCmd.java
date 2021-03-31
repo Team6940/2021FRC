@@ -33,8 +33,8 @@ public class DriveCmd extends CommandBase {
     double x =0;
     double z = 0;
     boolean qt ;
-    x = Robot.m_Drive.m_joystick.getRawAxis(1);
-    z = Robot.m_Drive.m_joystick.getRawAxis(0);
+    x = Robot.m_oi.m_stickL.getRawAxis(1);
+    z = Robot.m_oi.m_stickL.getRawAxis(0);
     qt = false;
     Robot.m_Drive.DriveCar(x, z, qt);
   }

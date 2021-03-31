@@ -34,8 +34,6 @@ public class Drive extends SubsystemBase {
 
   public NetworkTable m_limTable;
 
-  public Joystick m_joystick;
-
   private boolean isFast = true;
   private double speed1 = 0.5;
 
@@ -47,7 +45,6 @@ public class Drive extends SubsystemBase {
     m_rghtFollower = Robot.hardware.m_rghtFollower;
   
     m_diffDrive = Robot.hardware.m_diffDrive;
-    m_joystick = Robot.m_oi.m_stickL;
     m_limTable = NetworkTableInstance.getDefault().getTable("limelight");
     m_diffDrive.setMaxOutput(speed1);
 

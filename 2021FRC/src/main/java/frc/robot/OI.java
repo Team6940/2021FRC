@@ -20,20 +20,21 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  * To be finished.
  */
 public class OI {
-  public Joystick m_stickL = new Joystick(0);
-  //JoystickButton fastButton = new JoystickButton(m_stickL, 3);
-  //JoystickButton slowButton = new JoystickButton(m_stickL, 4);
+  public Joystick m_stickL;
+  public JoystickButton fastButton;
+  public JoystickButton slowButton;
   
   public OI(){
-    JoystickButton fastButton = new JoystickButton(m_stickL, 3);
-    JoystickButton slowButton = new JoystickButton(m_stickL, 4);
+    m_stickL = new Joystick(0);
+    fastButton = new JoystickButton(m_stickL, 3);
+    slowButton = new JoystickButton(m_stickL, 4);
+
   }
-public init(){
-   
+
+  public void init(){
     fastButton.whenPressed(new setFastCmd());
     slowButton.whenPressed(new setSlowCmd());
-}
-
+  }
   // There are a few additional built in buttons you can use. Additionally,
   // by subclassing Button you can create custom triggers and bind those to
   // commands the same as any other Button.

@@ -22,7 +22,7 @@ public class setSlowCmd extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //Robot.m_Drive.setSlow();
+    Robot.m_Drive.setSlow();
     //todo
   }
 
