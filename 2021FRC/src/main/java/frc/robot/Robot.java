@@ -67,6 +67,7 @@ public class Robot extends TimedRobot {
     m_Drive = new Drive();
     m_autoCommand = new DriveCmd();
     m_oi.init();
+    //Robot.hardware.m_diffDrive.setSafetyEnabled(false);
 
 
   }
@@ -93,7 +94,6 @@ public class Robot extends TimedRobot {
     z = Robot.m_oi.m_stickL.getRawAxis(0);
     qt = false;
     Robot.m_Drive.DriveCar(x, z, qt);
-
     CommandScheduler.getInstance().run();
 
   }
@@ -129,6 +129,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
+
   }
   
   
