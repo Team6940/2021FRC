@@ -85,6 +85,16 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+
+    //todo
+    double x =0;
+    double z = 0;
+    boolean qt ;
+    x = Robot.m_oi.m_stickL.getRawAxis(1);
+    z = Robot.m_oi.m_stickL.getRawAxis(0);
+    qt = false;
+    Robot.m_Drive.DriveCar(x, z, qt);
+
     CommandScheduler.getInstance().run();
 
   }
