@@ -39,7 +39,6 @@ public class Drive extends SubsystemBase {
   public double ta;
   public double tv;
 
-  private boolean isFast = true;
   private double speed1 = 0.5;
 
   public Drive() {
