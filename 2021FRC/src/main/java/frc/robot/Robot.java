@@ -36,9 +36,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.commands.DriveCmd;
-import frc.robot.util.OI;
+import frc.robot.util.RobotContainer;
 
 
 /**
@@ -52,8 +50,7 @@ public class Robot extends TimedRobot {
      * --- [1] Update CAN Device IDs ------
      */
     public static Hardware hardware;
-    public static Drive  m_Drive;
-    public static OI m_oi;
+    public static RobotContainer m_RobotContainer;
 
     Command m_autoCommand;
     SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -68,10 +65,8 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
 
     hardware = new Hardware();
-    m_oi = new OI();
-    m_Drive = new Drive();
-    m_oi.init();
-    CommandScheduler.getInstance().setDefaultCommand(m_Drive, new DriveCmd());
+    m_RobotContainer = new RobotContainer();
+   // CommandScheduler.getInstance().setDefaultCommand(m_Drive, new DriveCmd());
 
   }
 

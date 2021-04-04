@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems.drive.commands;
-import frc.robot.Robot;
+import frc.robot.util.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
@@ -16,7 +16,7 @@ public class setSlowCmd extends CommandBase {
    * @param subsystem The subsystem used by this command.
    */
   public setSlowCmd() {
-    addRequirements(Robot.m_Drive);
+    addRequirements(RobotContainer.m_Drive);
   }
 
   // Called when the command is initially scheduled.
@@ -28,7 +28,7 @@ public class setSlowCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Robot.m_Drive.setSlow();
+    RobotContainer.m_Drive.setSlow();
   }
 
   // Called once the command ends or is interrupted.

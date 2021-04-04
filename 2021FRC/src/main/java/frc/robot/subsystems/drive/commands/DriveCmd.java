@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems.drive.commands;
-import frc.robot.Robot;
+import frc.robot.util.RobotContainer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
@@ -17,7 +17,7 @@ public class DriveCmd extends CommandBase {
    */
   public DriveCmd(){
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Robot.m_Drive);
+    addRequirements(RobotContainer.m_Drive);
   }
 
   // Called when the command is initially scheduled.
@@ -33,10 +33,10 @@ public class DriveCmd extends CommandBase {
     double x =0;
     double z = 0;
     boolean qt ;
-    x = Robot.m_oi.m_stickL.getRawAxis(1);
-    z = Robot.m_oi.m_stickL.getRawAxis(0);
+    x = RobotContainer.m_stickL.getRawAxis(1);
+    z = RobotContainer.m_stickL.getRawAxis(0);
     qt = false;
-    Robot.m_Drive.DriveCar(x, z, qt);
+    RobotContainer.m_Drive.DriveCar(x, z, qt);
   }
 
   // Called once the command ends or is interrupted.
