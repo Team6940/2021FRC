@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
 
     hardware = new Hardware();
     m_RobotContainer = new RobotContainer();
-   // CommandScheduler.getInstance().setDefaultCommand(m_Drive, new DriveCmd());
+   
 
   }
 
