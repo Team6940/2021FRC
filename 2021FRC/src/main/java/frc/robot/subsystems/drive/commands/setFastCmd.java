@@ -2,21 +2,20 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.subsystems.drive.commands;
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class DriveCmd extends CommandBase {
+public class setFastCmd extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
- 
+
   /**
    * Creates a new DriveCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveCmd(){
-    // Use addRequirements() here to declare subsystem dependencies.
+  public setFastCmd() {
     addRequirements(Robot.m_Drive);
   }
 
@@ -29,14 +28,7 @@ public class DriveCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //todo
-    double x =0;
-    double z = 0;
-    boolean qt ;
-    x = Robot.m_oi.m_stickL.getRawAxis(1);
-    z = Robot.m_oi.m_stickL.getRawAxis(0);
-    qt = false;
-    Robot.m_Drive.DriveCar(x, z, qt);
+    Robot.m_Drive.setFast();
   }
 
   // Called once the command ends or is interrupted.
@@ -48,6 +40,6 @@ public class DriveCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

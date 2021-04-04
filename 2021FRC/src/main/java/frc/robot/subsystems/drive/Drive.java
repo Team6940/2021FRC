@@ -5,11 +5,12 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.drive;
 
 import frc.robot.Robot;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX; 
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -32,6 +33,11 @@ public class Drive extends SubsystemBase {
   public DifferentialDrive m_diffDrive;
 
   public NetworkTable m_limTable;
+
+  public double tx;
+  public double ty;
+  public double ta;
+  public double tv;
 
   private boolean isFast = true;
   private double speed1 = 0.5;
@@ -87,10 +93,17 @@ public class Drive extends SubsystemBase {
        m_diffDrive.arcadeDrive(forw, turn);
    }
      
+   tv=m_limTable.getEntry("tv").getDouble(0);
+   ta=m_limTable.getEntry("ta").getDouble(0);
+   tx=m_limTable.getEntry("tx").getDouble(0);
+   ty=m_limTable.getEntry("ty").getDouble(0);
   
    /* m_diffDrive.arcadeDrive(m_joystick.getRawAxis(1), -m_joystick.getRawAxis(0));
    m_diffDrive.arcadeDrive(m_joystick.getRawAxis(1), -m_joystick.getRawAxis(0));*/
 }
+
+
+
 public void setFast(){
     speed1 += 0.1;
 

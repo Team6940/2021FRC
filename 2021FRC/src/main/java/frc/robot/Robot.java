@@ -32,10 +32,13 @@
  */
 package frc.robot;
 
-import frc.robot.subsystems.*;
-import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.commands.DriveCmd;
+import frc.robot.util.OI;
 
 
 /**
@@ -50,8 +53,10 @@ public class Robot extends TimedRobot {
      */
     public static Hardware hardware;
     public static Drive  m_Drive;
-    public static  DriveCmd m_autoCommand ;
     public static OI m_oi;
+
+    Command m_autoCommand;
+    SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -65,10 +70,8 @@ public class Robot extends TimedRobot {
     hardware = new Hardware();
     m_oi = new OI();
     m_Drive = new Drive();
-    m_autoCommand = new DriveCmd();
     m_oi.init();
-    //Robot.hardware.m_diffDrive.setSafetyEnabled(false);
-
+    CommandScheduler.getInstance().setDefaultCommand(m_Drive, new DriveCmd());
 
   }
 
@@ -87,13 +90,6 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
 
     //todo
-    double x =0;
-    double z = 0;
-    boolean qt ;
-    x = Robot.m_oi.m_stickL.getRawAxis(1);
-    z = Robot.m_oi.m_stickL.getRawAxis(0);
-    qt = false;
-    Robot.m_Drive.DriveCar(x, z, qt);
     CommandScheduler.getInstance().run();
 
   }

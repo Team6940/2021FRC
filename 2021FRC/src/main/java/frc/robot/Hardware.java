@@ -9,6 +9,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import frc.robot.util.Constants;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
@@ -27,10 +28,10 @@ public class Hardware {
     public Hardware(){
 
         // drive
-        m_leftFront = new WPI_TalonFX(1);
-        m_leftFollower = new WPI_TalonFX(2);
-        m_rghtFront = new WPI_TalonFX(3);
-        m_rghtFollower = new WPI_TalonFX(4);
+        m_leftFront = new WPI_TalonFX(Constants.Drivebase.DRIVE_L1_PORT);
+        m_leftFollower = new WPI_TalonFX(Constants.Drivebase.DRIVE_L2_PORT);
+        m_rghtFront = new WPI_TalonFX(Constants.Drivebase.DRIVE_R1_PORT);
+        m_rghtFollower = new WPI_TalonFX(Constants.Drivebase.DRIVE_R2_PORT);
                 
         m_diffDrive = new DifferentialDrive(m_leftFront, m_rghtFront);
 
