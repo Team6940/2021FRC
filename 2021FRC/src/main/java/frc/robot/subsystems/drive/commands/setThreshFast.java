@@ -7,7 +7,7 @@ import frc.robot.util.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class setSlowCmd extends CommandBase {
+public class setThreshFast extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   /**
@@ -15,7 +15,7 @@ public class setSlowCmd extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public setSlowCmd() {
+  public setThreshFast() {
     addRequirements(RobotContainer.m_Drive);
   }
 
@@ -28,7 +28,7 @@ public class setSlowCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.m_Drive.setSlow();
+    RobotContainer.m_Drive.setFast();
   }
 
   // Called once the command ends or is interrupted.

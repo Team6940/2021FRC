@@ -3,39 +3,35 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems.drive.commands;
-import frc.robot.util.*;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.util.Constants;
+import frc.robot.util.RobotContainer;
 
-/** An example command that uses an example subsystem. */
-public class setFastCmd extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-
-  /**
-   * Creates a new DriveCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-  public setFastCmd() {
-    addRequirements(RobotContainer.m_Drive);
+public class LimelightRelease extends CommandBase {
+  /** Creates a new LimelightReleaseCmd. */
+  public LimelightRelease() {
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //todo
+    RobotContainer.m_Drive.setLightMode(Constants.Limelight.LED_OFF);
+    SmartDashboard.putNumber("LED", Constants.Limelight.LED_OFF);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.m_Drive.setFast();
+    RobotContainer.m_Drive.auto = false;
+    SmartDashboard.putNumber("auto", 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    //todo
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

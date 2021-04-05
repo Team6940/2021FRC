@@ -64,10 +64,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    fastButton.whenPressed(new setFastCmd());
-    slowButton.whenPressed(new setSlowCmd());
-    limelightButton.whenHeld(new LimelightHoldCmd());
-    limelightButton.whenReleased(new LimelightReleaseCmd());
+    fastButton.whenPressed(new setThreshFast());
+    slowButton.whenPressed(new setThreshSlow());
+    limelightButton.whenHeld(new LimelightHold());
+    limelightButton.whenReleased(new LimelightRelease());
     
 
   }

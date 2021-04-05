@@ -9,24 +9,24 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.util.Constants;
 import frc.robot.util.RobotContainer;
 
-public class LimelightReleaseCmd extends CommandBase {
-  /** Creates a new LimelightReleaseCmd. */
-  public LimelightReleaseCmd() {
+public class LimelightHold extends CommandBase {
+  /** Creates a new LimelightCmd. */
+  public LimelightHold() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.m_Drive.setLightMode(Constants.Limelight.LED_OFF);
-    SmartDashboard.putNumber("LED", Constants.Limelight.LED_OFF);
+    RobotContainer.m_Drive.setLightMode(Constants.Limelight.LED_ON);
+    SmartDashboard.putNumber("LED", Constants.Limelight.LED_ON);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.m_Drive.auto = false;
-    SmartDashboard.putNumber("auto", 0);
+    RobotContainer.m_Drive.auto = true;
+    SmartDashboard.putNumber("auto", 1);
   }
 
   // Called once the command ends or is interrupted.
