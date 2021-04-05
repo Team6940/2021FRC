@@ -26,6 +26,7 @@ public class RobotContainer {
   //define fast&slow button
   public static JoystickButton fastButton;
   public static JoystickButton slowButton;
+  public static JoystickButton limelightButton;
 
   // The robot's subsystems and commands are defined here...
   public static Drive m_Drive;
@@ -39,6 +40,7 @@ public class RobotContainer {
   //set Joystick buttons
   fastButton = new JoystickButton(m_stickL, 3);
   slowButton = new JoystickButton(m_stickL, 4);
+  limelightButton = new JoystickButton(m_stickL,5);
 
   //set subsystems
   m_Drive = new Drive(); 
@@ -64,6 +66,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
     fastButton.whenPressed(new setFastCmd());
     slowButton.whenPressed(new setSlowCmd());
+    limelightButton.whenHeld(new LimelightHoldCmd());
+    limelightButton.whenReleased(new LimelightReleaseCmd());
+    
 
   }
 

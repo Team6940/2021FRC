@@ -24,6 +24,22 @@ public class Constants {
 
     }
 
+    public class Limelight{
+        // ledmode
+        public static final int LED_DEFAULT = 0;
+        public static final int LED_OFF = 1;
+        public static final int LED_FLASH = 2;
+        public static final int LED_ON = 3;
+
+        // Limelight parameters
+        /*These numbers must be tuned for your Robot! Be careful!*/
+        public static final double STEER_K = 0.03;             // how hard to turn toward the target
+        public static final double DRIVE_K = 0.26;             // how hard to drive fwd toward the target
+        public static final double DESIRED_TARGET_AREA = 13.0; //Area of the target when the robot reaches the wall
+        public static final double MAX_DRIVE = 0.7;            // Simple speed limit so we don't drive too fast
+
+    }
+
     public class Gyro{
 
          // PID for gyro
