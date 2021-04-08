@@ -7,8 +7,12 @@
 
 package frc.robot.subsystems.drive;
 
+import frc.robot.Hardware;
 import frc.robot.Robot;
 import frc.robot.util.Constants;
+import frc.robot.util.RobotContainer;
+
+import com.kauailabs.navx.frc.AHRS;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX; 
 
@@ -50,6 +54,11 @@ public class Drive extends SubsystemBase {
 
   public boolean auto;
 
+  //navX
+  public AHRS m_ahrs;
+  public boolean autoBalanceXMode;
+  public boolean autoBalanceYMode;
+
   //Speed threshold
   private double speed1 = 0.5;
 
@@ -64,6 +73,8 @@ public class Drive extends SubsystemBase {
     m_limTable = NetworkTableInstance.getDefault().getTable("limelight");
     m_diffDrive.setMaxOutput(speed1);
 
+    //navX
+    m_ahrs = Robot.hardware.ahrs;
   }
 
   @Override
@@ -127,6 +138,12 @@ public class Drive extends SubsystemBase {
     double forw = -1 * x; /* positive is forward */
     double turn = +1 * z; /* positive is right */
 
+    /* get necessary parameters for AutoBalance*/
+    double xAxisRate            = RobotContainer.m_stickL.getX();
+    double yAxisRate            = RobotContainer.m_stickL.getY();
+    double pitchAngleDegrees    = m_ahrs.getPitch();
+    double rollAngleDegrees     = m_ahrs.getRoll();
+
 
    /* If you want to set advanced speed , add speed1 or speed2 in the front*/
 
@@ -137,6 +154,42 @@ public class Drive extends SubsystemBase {
     if (Math.abs(turn) < 0.10) {
        turn = 0;
     }
+
+    // AutoBalance
+    if ( !autoBalanceXMode && 
+      (Math.abs(pitchAngleDegrees) >= 
+      Math.abs(Constants.navX.kOffBalanceAngleThresholdDegrees))) {
+      autoBalanceXMode = true;
+    }
+    else if ( autoBalanceXMode && 
+          (Math.abs(pitchAngleDegrees) <= 
+            Math.abs(Constants.navX.kOonBalanceAngleThresholdDegrees))) {
+      autoBalanceXMode = false;
+    }
+    if ( !autoBalanceYMode && 
+      (Math.abs(pitchAngleDegrees) >= 
+      Math.abs(Constants.navX.kOffBalanceAngleThresholdDegrees))) {
+      autoBalanceYMode = true;
+    }
+    else if ( autoBalanceYMode && 
+          (Math.abs(pitchAngleDegrees) <= 
+            Math.abs(Constants.navX.kOonBalanceAngleThresholdDegrees))) {
+    autoBalanceYMode = false;
+    }
+  
+    // Control drive system automatically, 
+    // driving in reverse direction of pitch/roll angle,
+    // with a magnitude based upon the angle
+  
+    if ( autoBalanceXMode ) {
+      double pitchAngleRadians = pitchAngleDegrees * (Math.PI / 180.0);
+      xAxisRate = Math.sin(pitchAngleRadians) * -1;
+    }
+    if ( autoBalanceYMode ) {
+      double rollAngleRadians = rollAngleDegrees * (Math.PI / 180.0);
+      yAxisRate = Math.sin(rollAngleRadians) * -1;
+    }
+
 
    /*drive the robot*/
     if (auto){
@@ -149,17 +202,38 @@ public class Drive extends SubsystemBase {
       }
     }
     else{
-      if(qt){
-        m_diffDrive.curvatureDrive(forw, turn, qt);
+      if(autoBalanceYMode){
+        if(qt){
+          m_diffDrive.curvatureDrive(xAxisRate, yAxisRate, qt);
+          SmartDashboard.putNumber("xAxisRate", xAxisRate);
+          SmartDashboard.putNumber("yAxisRate", yAxisRate);
+        }
+        else{
+          m_diffDrive.arcadeDrive(xAxisRate, yAxisRate);
+          SmartDashboard.putNumber("xAxisRate", xAxisRate);
+          SmartDashboard.putNumber("yAxisRate", yAxisRate);
+        }
       }
       else{
-        m_diffDrive.arcadeDrive(forw, turn);
+        if(qt){
+          m_diffDrive.curvatureDrive(forw, turn, qt);
+        }
+        else{
+          m_diffDrive.arcadeDrive(forw, turn);
+        }
       }
     }
 
      
    /* m_diffDrive.arcadeDrive(m_joystick.getRawAxis(1), -m_joystick.getRawAxis(0));
    m_diffDrive.arcadeDrive(m_joystick.getRawAxis(1), -m_joystick.getRawAxis(0));*/
+}
+
+public void AutoBalanceinit(){ 
+}
+
+public void AutoBalance(){
+
 }
 
 public void setLightMode(int mode){

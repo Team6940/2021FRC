@@ -6,12 +6,16 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+
+import frc.robot.util.Constants;
+
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import frc.robot.util.Constants;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 
 
@@ -24,6 +28,9 @@ public class Hardware {
     public WPI_TalonFX m_rghtFollower;
 
     public DifferentialDrive m_diffDrive;
+
+    // navX sensor
+    public AHRS ahrs;
 
     public Hardware(){
 
@@ -58,6 +65,9 @@ public class Hardware {
         m_leftFollower.setInverted(InvertType.FollowMaster);
 		
         m_diffDrive.setRightSideInverted(false);
+
+        //navX
+        ahrs = new AHRS(SPI.Port.kMXP);
 
     }
 

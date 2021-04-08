@@ -40,6 +40,12 @@ public class Constants {
 
     }
 
+    public class navX{
+        // Balance Threshold
+        public static final double kOffBalanceAngleThresholdDegrees = 10;
+        public static final double kOonBalanceAngleThresholdDegrees  = 5;
+    }
+
     public class Gyro{
 
          // PID for gyro
