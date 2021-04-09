@@ -7,6 +7,10 @@ package frc.robot.util;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.drive.commands.*;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.commands.ShootCmd;
+import frc.robot.subsystems.shooter.commands.ShooterOff;
+import frc.robot.subsystems.shooter.commands.ShooterOn;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.*;
 import edu.wpi.first.wpilibj.Joystick;
@@ -27,10 +31,16 @@ public class RobotContainer {
   public static JoystickButton fastButton;
   public static JoystickButton slowButton;
   public static JoystickButton limelightButton;
+  public static JoystickButton shooterButton;
 
   // The robot's subsystems and commands are defined here...
+
+  // DriveBase
   public static Drive m_Drive;
   public DriveCmd m_autoCommand;
+
+  // Shooter
+  public static Shooter m_Shooter;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -41,12 +51,16 @@ public class RobotContainer {
   fastButton = new JoystickButton(m_stickL, 3);
   slowButton = new JoystickButton(m_stickL, 4);
   limelightButton = new JoystickButton(m_stickL,5);
+  shooterButton = new JoystickButton(m_stickL, 1);
 
   //set subsystems
   m_Drive = new Drive(); 
+
+  m_Shooter = new Shooter();
   
   //Set default command
   m_Drive.setDefaultCommand(new DriveCmd());
+  m_Shooter.setDefaultCommand(new ShootCmd());
 
   //set autoCommand
   //it is just for test
@@ -68,6 +82,8 @@ public class RobotContainer {
     slowButton.whenPressed(new setThreshSlow());
     limelightButton.whenHeld(new LimelightHold());
     limelightButton.whenReleased(new LimelightRelease());
+    shooterButton.whenHeld(new ShooterOn());
+    shooterButton.whenReleased(new ShooterOff());
     
 
   }

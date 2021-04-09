@@ -41,9 +41,24 @@ public class Constants {
     }
 
     public class navX{
+
         // Balance Threshold
         public static final double kOffBalanceAngleThresholdDegrees = 10;
         public static final double kOonBalanceAngleThresholdDegrees  = 5;
+    }
+
+    public class shooter{
+
+        // motor
+        public static final double ShooterON_Percent_Output = 0.5;
+        public static final double ShooterOff_Percent_Output = 0.00;
+
+        public static final boolean IS_LeftShooter_INVERTED = false;
+        public static final boolean IS_RightShooter_INVERTED = true;
+
+
+        public static final int Left_Shooter_Port = 5;
+        public static final int Right_Shooter_Port = 6;
     }
 
     public class Gyro{

@@ -29,6 +29,10 @@ public class Hardware {
 
     public DifferentialDrive m_diffDrive;
 
+    // shooter
+    public WPI_TalonFX m_shooterleft;
+    public WPI_TalonFX m_shooterright;
+
     // navX sensor
     public AHRS ahrs;
 
@@ -65,6 +69,13 @@ public class Hardware {
         m_leftFollower.setInverted(InvertType.FollowMaster);
 		
         m_diffDrive.setRightSideInverted(false);
+
+        // shooter
+        m_shooterleft = new WPI_TalonFX(Constants.shooter.Left_Shooter_Port);
+        m_shooterright = new WPI_TalonFX(Constants.shooter.Right_Shooter_Port);
+
+        m_shooterleft.setInverted(Constants.shooter.IS_LeftShooter_INVERTED);
+        m_shooterright.setInverted(Constants.shooter.IS_RightShooter_INVERTED);
 
         //navX
         ahrs = new AHRS(SPI.Port.kMXP);
