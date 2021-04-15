@@ -41,7 +41,6 @@ public class Shooter extends SubsystemBase {
     }
     else{
       ShooterWithPower(Constants.shooter.ShooterOff_Percent_Output);
-      SetShooterBrake();
     }
   }
 
