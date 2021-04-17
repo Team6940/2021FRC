@@ -7,7 +7,6 @@
 
 package frc.robot.subsystems.drive;
 
-import frc.robot.Hardware;
 import frc.robot.Robot;
 import frc.robot.util.Constants;
 import frc.robot.util.RobotContainer;

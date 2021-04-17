@@ -43,10 +43,21 @@ public class Hardware {
         m_leftFollower = new WPI_TalonFX(Constants.Drivebase.DRIVE_L2_PORT);
         m_rghtFront = new WPI_TalonFX(Constants.Drivebase.DRIVE_R1_PORT);
         m_rghtFollower = new WPI_TalonFX(Constants.Drivebase.DRIVE_R2_PORT);
-                
+        
         m_diffDrive = new DifferentialDrive(m_leftFront, m_rghtFront);
 
-        m_diffDrive.setMaxOutput(0.5);
+        m_diffDrive.setMaxOutput(Constants.Drivebase.Initial_Speed);
+        
+        // set "soft boot"
+        
+        m_leftFront.configOpenloopRamp(Constants.Drivebase.Loop_Parameter);
+        m_leftFollower.configOpenloopRamp(Constants.Drivebase.Loop_Parameter);
+        m_rghtFront.configOpenloopRamp(Constants.Drivebase.Loop_Parameter);
+        m_rghtFollower.configOpenloopRamp(Constants.Drivebase.Loop_Parameter);
+        m_leftFront.configClosedloopRamp(Constants.Drivebase.Loop_Parameter);
+        m_leftFollower.configClosedloopRamp(Constants.Drivebase.Loop_Parameter);
+        m_rghtFront.configClosedloopRamp(Constants.Drivebase.Loop_Parameter);
+        m_rghtFollower.configClosedloopRamp(Constants.Drivebase.Loop_Parameter);
       
         /* factory default values */
         m_rghtFront.configFactoryDefault();
