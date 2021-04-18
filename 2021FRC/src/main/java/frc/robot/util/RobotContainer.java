@@ -8,10 +8,11 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.drive.commands.*;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterPID;
 import frc.robot.subsystems.shooter.commands.ShootCmd;
 import frc.robot.subsystems.shooter.commands.ShooterOff;
 import frc.robot.subsystems.shooter.commands.ShooterOn;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.subsystems.drive.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -32,6 +33,9 @@ public class RobotContainer {
   public static JoystickButton slowButton;
   public static JoystickButton limelightButton;
   public static JoystickButton shooterButton;
+  public static JoystickButton shooterPIDButtonA;
+  public static JoystickButton shooterPIDButtonB;
+  public static JoystickButton shooterPIDButtonC;
 
   // The robot's subsystems and commands are defined here...
 
@@ -41,6 +45,7 @@ public class RobotContainer {
 
   // Shooter
   public static Shooter m_Shooter;
+  public static ShooterPID m_ShooterPID;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -52,11 +57,15 @@ public class RobotContainer {
   slowButton = new JoystickButton(m_stickL, 4);
   limelightButton = new JoystickButton(m_stickL,5);
   shooterButton = new JoystickButton(m_stickL, 1);
+  shooterPIDButtonA = new JoystickButton(m_stickL, 6);
+  shooterPIDButtonB = new JoystickButton(m_stickL, 7);
+  shooterPIDButtonC = new JoystickButton(m_stickL, 8);
 
   //set subsystems
   m_Drive = new Drive(); 
 
   m_Shooter = new Shooter();
+  m_ShooterPID = new ShooterPID();
   
   //Set default command
   m_Drive.setDefaultCommand(new DriveCmd());
@@ -84,7 +93,18 @@ public class RobotContainer {
     limelightButton.whenReleased(new LimelightRelease());
     shooterButton.whenHeld(new ShooterOn());
     shooterButton.whenReleased(new ShooterOff());
-    
+    shooterPIDButtonA.whenPressed(new InstantCommand(m_ShooterPID::enable, m_ShooterPID));
+    shooterPIDButtonB.whenPressed(new InstantCommand(m_ShooterPID::disable, m_ShooterPID));
+    shooterPIDButtonC.whenPressed(
+            new ConditionalCommand(
+                // Run the feeder
+                new InstantCommand(m_ShooterPID::runFeeder, m_ShooterPID),
+                // Do nothing
+                new InstantCommand(),
+                // Determine which of the above to do based on whether the shooter has reached the
+                // desired speed
+                m_ShooterPID::atSetpoint))
+        .whenReleased(new InstantCommand(m_ShooterPID::stopFeeder, m_ShooterPID));
 
   }
 
