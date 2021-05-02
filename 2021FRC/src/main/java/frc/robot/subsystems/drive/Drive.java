@@ -42,10 +42,10 @@ public class Drive extends SubsystemBase {
   //Limelight
   public NetworkTable m_limTable;
 
-  public double tv ; // m_limTable.getEntry("tv").getDouble(0);
-  public double ta ;//= m_limTable.getEntry("ta").getDouble(0);
-  public double tx ;//= m_limTable.getEntry("tx").getDouble(0);
-  public double ty ;//= m_limTable.getEntry("ty").getDouble(0);
+  public double tv ;
+  public double ta ;
+  public double tx ;
+  public double ty ;
 
   boolean m_LimelightHasValidTarget = false;
   double m_LimelightforwCommand = 0.0;
@@ -90,6 +90,8 @@ public class Drive extends SubsystemBase {
 
   public void Update_Limelight_Tracking(){
     double turn_cmd;
+    double Left_Threshold = Constants.Limelight.StopLime_ThresholdLeft;
+    double Rght_Threshold = Constants.Limelight.StopLime_ThresholdRght;
     //double forw_cmd;
 
     //Show the newtworktable number
@@ -109,7 +111,7 @@ public class Drive extends SubsystemBase {
     m_LimelightHasValidTarget = true;
   
     // Start with proportional steering
-    if(Get_tx()>Constants.Limelight.StopLime_ThresholdLeft && Get_tx()<Constants.Limelight.StopLime_ThresholdRght){
+    if(Get_tx() > Left_Threshold && Get_tx()< Rght_Threshold){
       turn_cmd = 0;
       m_LimelightturnCommand = turn_cmd;
     }
