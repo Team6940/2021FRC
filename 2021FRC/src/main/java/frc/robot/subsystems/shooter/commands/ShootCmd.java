@@ -22,6 +22,7 @@ public class ShootCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    RobotContainer.m_Shooter.Auto_Collimation();
     RobotContainer.m_Shooter.OutputShooter();
   }
 

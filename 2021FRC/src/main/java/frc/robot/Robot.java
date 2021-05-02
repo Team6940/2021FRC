@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.util.RobotContainer;
 
 
@@ -86,6 +87,11 @@ public class Robot extends TimedRobot {
 
     //todo
     CommandScheduler.getInstance().run();
+    //SmartDashboard.putNumber("Left Drive Encoder Value", Robot.hardware.m_leftFront.getSelectedSensorPosition() * Constants.Drivebase.kDriveTick2Feet);
+    //SmartDashboard.putNumber("Rght Drive Encoder Value", Robot.hardware.m_rghtFront.getSelectedSensorPosition() * Constants.Drivebase.kDriveTick2Feet);
+
+    SmartDashboard.putNumber("Left Drive Encoder Value", Robot.hardware.m_leftFront.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Rght Drive Encoder Value", Robot.hardware.m_rghtFront.getSelectedSensorPosition());
 
   }
 
@@ -93,6 +99,8 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+
+    m_autoCommand = m_RobotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autoCommand != null) {
@@ -113,6 +121,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    RobotContainer.m_Drive.enableMotors(false);
   }
 
   
@@ -131,4 +140,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
   }
   
+  @Override
+  public void disabledInit() {
+    RobotContainer.m_Drive.enableMotors(false);
+  }
 }

@@ -9,12 +9,16 @@ package frc.robot;
 
 import frc.robot.util.Constants;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI;
 
 
@@ -36,6 +40,10 @@ public class Hardware {
     // navX sensor
     public AHRS ahrs;
 
+    // Intake
+    public Compressor m_compressor;
+    public DoubleSolenoid hatchIntake = new DoubleSolenoid(0,1);
+
     public Hardware(){
 
         // drive
@@ -47,18 +55,8 @@ public class Hardware {
         m_diffDrive = new DifferentialDrive(m_leftFront, m_rghtFront);
 
         m_diffDrive.setMaxOutput(Constants.Drivebase.Initial_Speed);
+        m_diffDrive.setDeadband(0.05);
         
-        // set "soft boot"
-        
-        m_leftFront.configOpenloopRamp(Constants.Drivebase.Loop_Parameter);
-        m_leftFollower.configOpenloopRamp(Constants.Drivebase.Loop_Parameter);
-        m_rghtFront.configOpenloopRamp(Constants.Drivebase.Loop_Parameter);
-        m_rghtFollower.configOpenloopRamp(Constants.Drivebase.Loop_Parameter);
-        m_leftFront.configClosedloopRamp(Constants.Drivebase.Loop_Parameter);
-        m_leftFollower.configClosedloopRamp(Constants.Drivebase.Loop_Parameter);
-        m_rghtFront.configClosedloopRamp(Constants.Drivebase.Loop_Parameter);
-        m_rghtFollower.configClosedloopRamp(Constants.Drivebase.Loop_Parameter);
-      
         /* factory default values */
         m_rghtFront.configFactoryDefault();
         m_rghtFollower.configFactoryDefault();
@@ -80,6 +78,20 @@ public class Hardware {
         m_leftFollower.setInverted(InvertType.FollowMaster);
 		
         m_diffDrive.setRightSideInverted(false);
+
+        // init encoders
+        m_leftFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,10);
+        m_rghtFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,10);
+
+        m_leftFront.setSensorPhase(false);
+        m_rghtFront.setSensorPhase(true);
+
+        // reset the encoders to zero
+        m_leftFront.setSelectedSensorPosition(0,0,10);
+        m_rghtFront.setSelectedSensorPosition(0,0,10);
+
+        // start the compressor
+        //m_compressor.start();
 
         // shooter
         m_shooterleft = new WPI_TalonFX(Constants.shooter.Left_Shooter_Port);

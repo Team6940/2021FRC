@@ -8,6 +8,7 @@
 package frc.robot.util;
 
 public class Constants {
+    private static final double PI = Math.PI;
 
     public class Drivebase{
 
@@ -26,7 +27,9 @@ public class Constants {
         // solenoid
         public static final int DRIVE_STATE_PORT = 6;
 
-        // invert
+        // unit conversion
+        public static final double kDriveTick2Feet = 1.0 / 2048  * 6 * Math.PI / 12;
+
 
     }
 
@@ -40,9 +43,15 @@ public class Constants {
         // Limelight parameters
         /*These numbers must be tuned for your Robot! Be careful!*/
         public static final double STEER_K = 0.03;             // how hard to turn toward the target
-        public static final double DRIVE_K = 0.26;             // how hard to drive fwd toward the target
-        public static final double DESIRED_TARGET_AREA = 13.0; //Area of the target when the robot reaches the wall
-        public static final double MAX_DRIVE = 0.7;            // Simple speed limit so we don't drive too fast
+        public static final double DRIVE_K = 0.8;              // how hard to drive fwd toward the target
+        public static final double DESIRED_TARGET_AREA = 0.3;  // Area of the target when the robot reaches the wall
+        public static final double MAX_DRIVE = 0.5;            // Simple speed limit so we don't drive too fast
+        public static final double Target_Height = 249.555;    // The height bewtween the centre of target and the ground.
+        public static final double Limelight_Angle = PI/6;       // Set the angle bewteen Limelight and the ground.
+        public static final double Shooter_Height = 45;        // The Height between Shooter and the ground .
+        public static final double StopLime_ThresholdLeft = -2.5;
+        public static final double StopLime_ThresholdRght = 2.5;
+        
 
     }
 
@@ -79,8 +88,10 @@ public class Constants {
             // Distance units will be rotations
             1.0 / (double) kEncoderCPR;
       
-        public static final int kShooterMotorPort = 4;
-        public static final int kFeederMotorPort = 5;
+        public static final int kShooterLeftMotorPort = 5;
+        public static final int kShooterRghtMotorPort = 6;
+
+        public static final int kFeederMotorPort = 7;
       
         public static final double kShooterFreeRPS = 5300;
         public static final double kShooterTargetRPS = 4000;
@@ -100,6 +111,15 @@ public class Constants {
       
         public static final double kFeederSpeed = 0.5;
         }
+
+        public static final class AutoConstants {
+            public static final double kAutoTimeoutSeconds = 12;
+            public static final double kAutoShootTimeSeconds = 7;
+          }
+    
+    public class Button{
+        public static final int kA = 1;
+    }
 
     public class shooter{
 

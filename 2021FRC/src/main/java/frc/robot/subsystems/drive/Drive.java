@@ -42,16 +42,18 @@ public class Drive extends SubsystemBase {
   //Limelight
   public NetworkTable m_limTable;
 
-  public double tx;
-  public double ty;
-  public double ta;
-  public double tv;
+  public double tv ; // m_limTable.getEntry("tv").getDouble(0);
+  public double ta ;//= m_limTable.getEntry("ta").getDouble(0);
+  public double tx ;//= m_limTable.getEntry("tx").getDouble(0);
+  public double ty ;//= m_limTable.getEntry("ty").getDouble(0);
 
-  private boolean m_LimelightHasValidTarget = false;
-  private double m_LimelightforwCommand = 0.0;
-  private double m_LimelightturnCommand = 0.0;
+  boolean m_LimelightHasValidTarget = false;
+  double m_LimelightforwCommand = 0.0;
+  double m_LimelightturnCommand = 0.0;
 
   public boolean auto;
+  int coast =1;
+  int brake = 0;
 
   //navX
   public AHRS m_ahrs;
@@ -59,7 +61,7 @@ public class Drive extends SubsystemBase {
   public boolean autoBalanceYMode;
 
   //Speed threshold
-  private double speed1 = 0.5;
+  double speed1 =  0.5;
 
   public Drive() {
     //here is todo
@@ -88,21 +90,16 @@ public class Drive extends SubsystemBase {
 
   public void Update_Limelight_Tracking(){
     double turn_cmd;
-    double forw_cmd;
-
-    tv=m_limTable.getEntry("tv").getDouble(0);
-    ta=m_limTable.getEntry("ta").getDouble(0);
-    tx=m_limTable.getEntry("tx").getDouble(0);
-    ty=m_limTable.getEntry("ty").getDouble(0);
+    //double forw_cmd;
 
     //Show the newtworktable number
-    SmartDashboard.putNumber("tv", tv);
-    SmartDashboard.putNumber("ta", ta);
-    SmartDashboard.putNumber("tx", tx);
-    SmartDashboard.putNumber("ty", ty);
+    SmartDashboard.putNumber("tv", Get_tv());
+    SmartDashboard.putNumber("ta", Get_ta());
+    SmartDashboard.putNumber("tx", Get_tx());
+    SmartDashboard.putNumber("ty", Get_ty());
 
   
-    if (tv < 1.0){
+    if (Get_tv() < 1.0){
       m_LimelightHasValidTarget = false;
       m_LimelightforwCommand = 0.0;
       m_LimelightturnCommand = 0.0;
@@ -112,19 +109,37 @@ public class Drive extends SubsystemBase {
     m_LimelightHasValidTarget = true;
   
     // Start with proportional steering
-    turn_cmd = tx * Constants.Limelight.STEER_K;
-    m_LimelightturnCommand = turn_cmd;
-
-    // try to drive forward until the target area reaches our desired area
-    forw_cmd = (Constants.Limelight.DESIRED_TARGET_AREA - ta) * Constants.Limelight.DRIVE_K;
-    
-    // don't let the robot drive too fast into the goal
-    if (forw_cmd > Constants.Limelight.MAX_DRIVE){
-      forw_cmd = Constants.Limelight.MAX_DRIVE;
+    if(Get_tx()>Constants.Limelight.StopLime_ThresholdLeft && Get_tx()<Constants.Limelight.StopLime_ThresholdRght){
+      turn_cmd = 0;
+      m_LimelightturnCommand = turn_cmd;
     }
-    m_LimelightforwCommand = forw_cmd;
-  
+    else{
+      turn_cmd = Get_tx() * Constants.Limelight.STEER_K;
+      m_LimelightturnCommand = turn_cmd;
+    }
   }
+
+  public double Get_tx(){
+    tx = m_limTable.getEntry("tx").getDouble(0);
+    return tx;
+  }
+
+  public double Get_ty(){
+    ty = m_limTable.getEntry("ty").getDouble(0);
+    return ty;
+  }
+
+  public double Get_ta(){
+    ta = m_limTable.getEntry("ta").getDouble(0);
+    return ta;
+  }
+
+  public double Get_tv(){
+    tv = m_limTable.getEntry("tv").getDouble(0);
+    return tv;
+  }
+
+
 
   public void DriveCar(double x,double z,boolean qt){
 
@@ -134,25 +149,14 @@ public class Drive extends SubsystemBase {
     Update_Limelight_Tracking();
 
     /* get gamepad stick values */
-    double forw = -1 * x; /* positive is forward */
-    double turn = +1 * z; /* positive is right */
+    double forw = -1 * x ; /* positive is forward */
+    double turn = +1 * z ; /* positive is right */
 
     /* get necessary parameters for AutoBalance*/
     double xAxisRate            = RobotContainer.m_stickL.getX();
     double yAxisRate            = RobotContainer.m_stickL.getY();
     double pitchAngleDegrees    = m_ahrs.getPitch();
     double rollAngleDegrees     = m_ahrs.getRoll();
-
-
-   /* If you want to set advanced speed , add speed1 or speed2 in the front*/
-
-   /* deadband gamepad 10% */
-    if (Math.abs(forw) < 0.10) {
-       forw = 0;
-    }
-    if (Math.abs(turn) < 0.10) {
-       turn = 0;
-    }
 
     // AutoBalance
     if ( !autoBalanceXMode && 
@@ -193,11 +197,12 @@ public class Drive extends SubsystemBase {
    /*drive the robot*/
     if (auto){
       if (m_LimelightHasValidTarget){
-        setLightMode(Constants.Limelight.LED_FLASH);
+        //setLightMode(Constants.Limelight.LED_ON);
         m_diffDrive.arcadeDrive(m_LimelightforwCommand,m_LimelightturnCommand);
       }
       else{
         m_diffDrive.arcadeDrive(0.0,0.0);
+        //setLightMode(Constants.Limelight.LED_OFF);
       }
     }
     else{
@@ -216,9 +221,12 @@ public class Drive extends SubsystemBase {
       else{
         if(qt){
           m_diffDrive.curvatureDrive(forw, turn, qt);
+          //setCoast();
         }
         else{
           m_diffDrive.arcadeDrive(forw, turn);
+          //setCoast();
+          SmartDashboard.putNumber("turn_cmd",m_LimelightturnCommand);
         }
       }
     }
@@ -252,16 +260,19 @@ public void setSlow(){
       speed1 = MathUtil.clamp(speed1,0,1.0);
       m_diffDrive.setMaxOutput(speed1);
 }
-public void setBrake(){
-        m_leftFront.setNeutralMode(NeutralMode.Brake);
-        m_leftFollower.setNeutralMode(NeutralMode.Brake);
-        m_rghtFront.setNeutralMode(NeutralMode.Brake);
-        m_rghtFollower.setNeutralMode(NeutralMode.Brake);
+
+public void enableMotors(boolean on){
+  NeutralMode mode;
+  if(on){
+    mode = NeutralMode.Brake;
+  }
+  else{
+    mode = NeutralMode.Coast;
+  }
+  m_leftFront.setNeutralMode(mode);
+  m_leftFollower.setNeutralMode(mode);
+  m_rghtFront.setNeutralMode(mode);
+  m_rghtFollower.setNeutralMode(mode);
+  //coast++;
 }
-public void setCoast(){
-        m_leftFront.setNeutralMode(NeutralMode.Coast);
-        m_leftFollower.setNeutralMode(NeutralMode.Coast);
-        m_rghtFront.setNeutralMode(NeutralMode.Coast);
-        m_rghtFollower.setNeutralMode(NeutralMode.Coast);
-      }
 }

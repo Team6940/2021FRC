@@ -7,9 +7,11 @@ package frc.robot.subsystems.shooter;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.util.Constants;
+import frc.robot.util.RobotContainer;
 
 public class Shooter extends SubsystemBase {
   // motor
@@ -17,6 +19,9 @@ public class Shooter extends SubsystemBase {
   public WPI_TalonFX m_shooterright;
 
   public boolean m_switch;
+
+  // Current Distance between robot and the target
+  public static double d;
 
   /** Creates a new Shooter. */
   public Shooter() {
@@ -43,6 +48,12 @@ public class Shooter extends SubsystemBase {
       ShooterWithPower(Constants.shooter.ShooterOff_Percent_Output);
     }
   }
+
+  public void Auto_Collimation(){
+    d = (Constants.Limelight.Target_Height - Constants.Limelight.Shooter_Height) / Math.tan(Constants.Limelight.Limelight_Angle + RobotContainer.m_Drive.Get_ty());
+    SmartDashboard.putNumber("d", d);
+  }
+
 
   public void SetShooterBrake(){
     m_shooterleft.setNeutralMode(NeutralMode.Brake);

@@ -12,6 +12,7 @@ import frc.robot.subsystems.shooter.commands.ShootCmd;
 import frc.robot.subsystems.shooter.commands.ShooterOff;
 import frc.robot.subsystems.shooter.commands.ShooterOn;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.auto.Autonomous;
 import frc.robot.subsystems.drive.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -37,7 +38,7 @@ public class RobotContainer {
 
   // DriveBase
   public static Drive m_Drive;
-  public DriveCmd m_autoCommand;
+  public Autonomous m_autoCommand;
 
   // Shooter
   public static Shooter m_Shooter;
@@ -64,7 +65,7 @@ public class RobotContainer {
 
   //set autoCommand
   //it is just for test
-  m_autoCommand = new DriveCmd();
+  m_autoCommand = new Autonomous();
 
   // Configure the button bindings
 
