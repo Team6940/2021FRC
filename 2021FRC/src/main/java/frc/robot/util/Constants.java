@@ -46,11 +46,24 @@ public class Constants {
         public static final double DRIVE_K = 0.8;              // how hard to drive fwd toward the target
         public static final double DESIRED_TARGET_AREA = 0.3;  // Area of the target when the robot reaches the wall
         public static final double MAX_DRIVE = 0.5;            // Simple speed limit so we don't drive too fast
-        public static final double Target_Height = 249.555;    // The height bewtween the centre of target and the ground.
-        public static final double Limelight_Angle = PI/6;       // Set the angle bewteen Limelight and the ground.
-        public static final double Shooter_Height = 45;        // The Height between Shooter and the ground .
+
+        // The height bewtween the centre of target and the ground.The unit is meter
+        public static final double Target_Height = 2.49555;
+
+        // Set the angle bewteen Limelight and the ground.
+        public static final double Limelight_Angle = PI/6;
+
+        // The Height between Shooter and the ground .
+        public static final double Shooter_Height = 0.45;
+
         public static final double StopLime_ThresholdLeft = -2.5;
         public static final double StopLime_ThresholdRght = 2.5;
+
+        // Set PID parameters.
+        public static final double KpAim = 0.1;
+        public static final double KpDistance = 0.1;
+
+        public static final double min_command = 0.05;
         
 
     }

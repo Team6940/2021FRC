@@ -8,8 +8,6 @@
 package frc.robot.subsystems.drive;
 
 import frc.robot.Robot;
-import frc.robot.util.Constants;
-import frc.robot.util.RobotContainer;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -47,18 +45,12 @@ public class Drive extends SubsystemBase {
   public double tx ;
   public double ty ;
 
-  boolean m_LimelightHasValidTarget = false;
-  double m_LimelightforwCommand = 0.0;
-  double m_LimelightturnCommand = 0.0;
-
   public boolean auto;
   int coast =1;
   int brake = 0;
 
   //navX
   public AHRS m_ahrs;
-  public boolean autoBalanceXMode;
-  public boolean autoBalanceYMode;
 
   //Speed threshold
   double speed1 =  0.5;
@@ -88,39 +80,6 @@ public class Drive extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public void Update_Limelight_Tracking(){
-    double turn_cmd;
-    double Left_Threshold = Constants.Limelight.StopLime_ThresholdLeft;
-    double Rght_Threshold = Constants.Limelight.StopLime_ThresholdRght;
-    //double forw_cmd;
-
-    //Show the newtworktable number
-    SmartDashboard.putNumber("tv", Get_tv());
-    SmartDashboard.putNumber("ta", Get_ta());
-    SmartDashboard.putNumber("tx", Get_tx());
-    SmartDashboard.putNumber("ty", Get_ty());
-
-  
-    if (Get_tv() < 1.0){
-      m_LimelightHasValidTarget = false;
-      m_LimelightforwCommand = 0.0;
-      m_LimelightturnCommand = 0.0;
-      return;
-    }
-  
-    m_LimelightHasValidTarget = true;
-  
-    // Start with proportional steering
-    if(Get_tx() > Left_Threshold && Get_tx()< Rght_Threshold){
-      turn_cmd = 0;
-      m_LimelightturnCommand = turn_cmd;
-    }
-    else{
-      turn_cmd = Get_tx() * Constants.Limelight.STEER_K;
-      m_LimelightturnCommand = turn_cmd;
-    }
-  }
-
   public double Get_tx(){
     tx = m_limTable.getEntry("tx").getDouble(0);
     return tx;
@@ -141,107 +100,17 @@ public class Drive extends SubsystemBase {
     return tv;
   }
 
-
-
-  public void DriveCar(double x,double z,boolean qt){
+  public void DriveCar(double x,double z){
 
     SmartDashboard.putNumber("x", x);
     SmartDashboard.putNumber("z", z);
-
-    Update_Limelight_Tracking();
 
     /* get gamepad stick values */
     double forw = -1 * x ; /* positive is forward */
     double turn = +1 * z ; /* positive is right */
 
-    /* get necessary parameters for AutoBalance*/
-    double xAxisRate            = RobotContainer.m_stickL.getX();
-    double yAxisRate            = RobotContainer.m_stickL.getY();
-    double pitchAngleDegrees    = m_ahrs.getPitch();
-    double rollAngleDegrees     = m_ahrs.getRoll();
-
-    // AutoBalance
-    if ( !autoBalanceXMode && 
-      (Math.abs(pitchAngleDegrees) >= 
-      Math.abs(Constants.navX.kOffBalanceAngleThresholdDegrees))) {
-      autoBalanceXMode = true;
-    }
-    else if ( autoBalanceXMode && 
-          (Math.abs(pitchAngleDegrees) <= 
-            Math.abs(Constants.navX.kOonBalanceAngleThresholdDegrees))) {
-      autoBalanceXMode = false;
-    }
-    if ( !autoBalanceYMode && 
-      (Math.abs(pitchAngleDegrees) >= 
-      Math.abs(Constants.navX.kOffBalanceAngleThresholdDegrees))) {
-      autoBalanceYMode = true;
-    }
-    else if ( autoBalanceYMode && 
-          (Math.abs(pitchAngleDegrees) <= 
-            Math.abs(Constants.navX.kOonBalanceAngleThresholdDegrees))) {
-    autoBalanceYMode = false;
-    }
-  
-    // Control drive system automatically, 
-    // driving in reverse direction of pitch/roll angle,
-    // with a magnitude based upon the angle
-  
-    if ( autoBalanceXMode ) {
-      double pitchAngleRadians = pitchAngleDegrees * (Math.PI / 180.0);
-      xAxisRate = Math.sin(pitchAngleRadians) * -1;
-    }
-    if ( autoBalanceYMode ) {
-      double rollAngleRadians = rollAngleDegrees * (Math.PI / 180.0);
-      yAxisRate = Math.sin(rollAngleRadians) * -1;
-    }
-
-
-   /*drive the robot*/
-    if (auto){
-      if (m_LimelightHasValidTarget){
-        //setLightMode(Constants.Limelight.LED_ON);
-        m_diffDrive.arcadeDrive(m_LimelightforwCommand,m_LimelightturnCommand);
-      }
-      else{
-        m_diffDrive.arcadeDrive(0.0,0.0);
-        //setLightMode(Constants.Limelight.LED_OFF);
-      }
-    }
-    else{
-      if(autoBalanceYMode){
-        if(qt){
-          m_diffDrive.curvatureDrive(xAxisRate, yAxisRate, qt);
-          SmartDashboard.putNumber("xAxisRate", xAxisRate);
-          SmartDashboard.putNumber("yAxisRate", yAxisRate);
-        }
-        else{
-          m_diffDrive.arcadeDrive(xAxisRate, yAxisRate);
-          SmartDashboard.putNumber("xAxisRate", xAxisRate);
-          SmartDashboard.putNumber("yAxisRate", yAxisRate);
-        }
-      }
-      else{
-        if(qt){
-          m_diffDrive.curvatureDrive(forw, turn, qt);
-          //setCoast();
-        }
-        else{
-          m_diffDrive.arcadeDrive(forw, turn);
-          //setCoast();
-          SmartDashboard.putNumber("turn_cmd",m_LimelightturnCommand);
-        }
-      }
-    }
-
-     
-   /* m_diffDrive.arcadeDrive(m_joystick.getRawAxis(1), -m_joystick.getRawAxis(0));
-   m_diffDrive.arcadeDrive(m_joystick.getRawAxis(1), -m_joystick.getRawAxis(0));*/
-}
-
-public void AutoBalanceinit(){ 
-}
-
-public void AutoBalance(){
+    /*drive the robot*/
+    m_diffDrive.arcadeDrive(forw, turn);
 
 }
 

@@ -32,11 +32,9 @@ public class DriveCmd extends CommandBase {
     //todo
     double x =0;
     double z = 0;
-    boolean qt ;
-    x = RobotContainer.m_stickL.getRawAxis(1);
-    z = RobotContainer.m_stickL.getRawAxis(0);
-    qt = false;
-    RobotContainer.m_Drive.DriveCar(x, z, qt);
+    x = RobotContainer.m_driverjoystick.getRawAxis(1);
+    z = RobotContainer.m_driverjoystick.getRawAxis(0);
+    RobotContainer.m_Drive.DriveCar(x, z);
   }
 
   // Called once the command ends or is interrupted.
