@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.shooter;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -36,8 +37,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void ShooterWithPower(double power){
-    m_shooterleft.set(power);
-    m_shooterright.set(power);
+    m_shooterleft.set(ControlMode.PercentOutput,power);
+    m_shooterright.set(ControlMode.PercentOutput,power);
   }
 
   public void OutputShooter(){
