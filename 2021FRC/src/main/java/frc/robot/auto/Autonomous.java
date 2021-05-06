@@ -4,6 +4,7 @@
 
 package frc.robot.auto;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.util.Constants;
@@ -32,7 +33,13 @@ public class Autonomous extends CommandBase {
     double leftPosition = Robot.hardware.m_leftFront.getSelectedSensorPosition() * Constants.Drivebase.kDriveTick2Feet;
     double rghtPosition = Robot.hardware.m_rghtFront.getSelectedSensorPosition() * Constants.Drivebase.kDriveTick2Feet;
     double distance = (leftPosition + rghtPosition) / 2;
+    double selSenVel = Robot.hardware.m_rghtFront.getSelectedSensorVelocity(0);
 
+    
+    SmartDashboard.putNumber("leftPosition", leftPosition);
+    SmartDashboard.putNumber("rghtPosition", rghtPosition);
+    SmartDashboard.putNumber("selSenVel", selSenVel);
+    
     if(distance<1){
       RobotContainer.m_Drive.m_diffDrive.tankDrive(0.6, 0.6);
     }

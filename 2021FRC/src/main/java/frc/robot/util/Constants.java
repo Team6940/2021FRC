@@ -7,6 +7,8 @@
 
 package frc.robot.util;
 
+import com.ctre.phoenix.motorcontrol.can.BaseMotorControllerConfiguration;
+
 public class Constants {
     private static final double PI = Math.PI;
 
@@ -30,6 +32,10 @@ public class Constants {
         // unit conversion
         public static final double kDriveTick2Feet = 1.0 / 2048  * 6 * Math.PI / 12;
 
+
+    }
+
+    public class ColorSensor{
 
     }
 
@@ -145,6 +151,18 @@ public class Constants {
      
         public static final int Left_Shooter_Port = 5;
         public static final int Right_Shooter_Port = 6;
+
+        // ball transpoer motor
+        public static final int Left_Balltrans_Port = 1;
+        public static final int Right_Balltrans_Port = 2;
+
+        public static final boolean IS_Balltransleft_INVERTED = false;
+        public static final boolean IS_BalltransRight_INVERTED = true;
+
+        public static final double BallTrans_On_Power = 1;
+        public static final double BallTrans_Off_Power = 0;
+
+
     }
 
     public class Gyro{
@@ -243,38 +261,22 @@ public class Constants {
     public class Intake{
 
         // motor
-        public static final int INTAKE_RAIL_PORT = 9;
-        public static final int INTAKE_CLAW_PORT = 10;
+        public static final int Left_Intake_Port = 3;
+        public static final int Right_Intake_Port = 4;
 
-        public static final boolean IS_RAIL_LINVERTED = false;
-        public static final boolean IS_CLAW_INVERTED = false;
-
-        public static final double INTAKE_RAIL_PERCENT_OUTPUT = 0.75;
-        public static final double INTAKE_CLAW_PERCENT_OUTPUT = 0.75;
+        public static final boolean Is_Intakeleft_Inverted = true;
+        public static final boolean Is_Intakeright_Inverted = false;
 
         // solenoid
-        public static final int INTAKE_SOLENOID_PORT = 2;
+        public static final int Left_Solenoid_Port = 1;
+        public static final int Right_Solenoid_Port = 2;
 
-        public static final boolean IS_INTAKERAIL_INVERTED = true;
+        public static final boolean Solenoid_Stop = false;
+        public static final boolean Soenoid_Start = true;
 
-    }
-
-    public class Output{
-
-        // motor
-        public static final int OUTPUT_CARGO_PORT = 11;
-        public static final int OUTPUT_PANEL_PORT = 12;
-
-        public static final boolean IS_CARGO_INVERTED = false;
-        public static final boolean IS_PANEL_INVERTED = false;
-
-        public static final double CARGO_PERCENT_OUTPUT = 0.75;
-        public static final double PANEL_IN_PERCENT_OUTPUT = 0.65;
-        public static final double PANEL_OUT_PORTION = -0.85;
-
-        // solenoid
-        public static final int OUTPUT_SOLENOID_PORT = 5;
-
+        // motor speed
+        public static final double Intake_Start_Speed = 1;
+        public static final double Intake_Stop_Speed = 0;
     }
 
     public class Climb{
@@ -303,27 +305,6 @@ public class Constants {
 
         public static final double CLIMB_UP_PERCENTOUTPUT = 0.25;
         public static final double CLIME_FORWARD_PERCENTOUTPUT = 0.5;
-
-    }
-
-    public class Vision{
-
-        public static final double LIMELIGHT_HEIGHT = 1000;
-        public static final double LIMELIGHT_ANGLE = -19;
-
-        public static final double PANEL_REFLECTIVETAPE_HEIGHT = 0;
-        public static final double CARGO_REFLECTIVETAPE_HEIGHT = 0;
-
-        // PID for vision
-        public static final double VISION_KP = 0.01;
-        public static final double VISION_KI = 0.00;
-        public static final double VISION_KD = 0.00;
-        public static final double VISION_KF = 0.00;
-
-        public static final double STEER_K = 0.0275;    // how hard to turn toward the target
-        public static final double DRIVE_K = 0.00;       // how hard to drive fwd toward the target
-        public static final double TARGET_AREA = 13.0;  // Area of the target when the robot reaches the wall
-        public static final double MAX_DRIVE = 0.45;    // Simple speed limit so we don't drive too fast
 
     }
 

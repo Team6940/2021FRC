@@ -2,16 +2,17 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.shooter.commands;
-import frc.robot.util.RobotContainer;
+package frc.robot.subsystems.intake.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.util.Constants;
+import frc.robot.util.RobotContainer;
 
-public class ShooterOff extends CommandBase {
-  /** Creates a new ShooterOff. */
-  public ShooterOff() {
+public class Ballin extends CommandBase {
+  /** Creates a new Ballin. */
+  public Ballin() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.m_Shooter);
+    addRequirements(RobotContainer.m_intake);
   }
 
   // Called when the command is initially scheduled.
@@ -21,7 +22,9 @@ public class ShooterOff extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.m_Shooter.m_shooter_switch = false;
+    RobotContainer.m_intake.SolenoidWithSwitch(Constants.Intake.Soenoid_Start);
+    RobotContainer.m_intake.IntakeWithPower(Constants.Intake.Intake_Start_Speed);
+
   }
 
   // Called once the command ends or is interrupted.
@@ -31,6 +34,6 @@ public class ShooterOff extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

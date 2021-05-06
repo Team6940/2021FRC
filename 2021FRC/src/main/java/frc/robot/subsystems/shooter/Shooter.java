@@ -19,7 +19,7 @@ public class Shooter extends SubsystemBase {
   public WPI_TalonFX m_shooterleft;
   public WPI_TalonFX m_shooterright;
 
-  public boolean m_switch;
+  public boolean m_shooter_switch;
 
   // Current Distance between robot and the target
   public static double d;
@@ -36,13 +36,13 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void ShooterWithPower(double power){
-    m_shooterleft.set(ControlMode.PercentOutput,power);
-    m_shooterright.set(ControlMode.PercentOutput,power);
+  public void ShooterWithPower(double shooter_power){
+    m_shooterleft.set(ControlMode.PercentOutput,shooter_power);
+    m_shooterright.set(ControlMode.PercentOutput,shooter_power);
   }
 
   public void OutputShooter(){
-    if(m_switch){
+    if(m_shooter_switch){
       ShooterWithPower(Constants.shooter.ShooterON_Percent_Output);
     }
     else{
