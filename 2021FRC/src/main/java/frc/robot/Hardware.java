@@ -145,8 +145,8 @@ public class Hardware {
         m_intakeleft.setInverted(Constants.Intake.Is_Intakeleft_Inverted);
         m_intakerght.setInverted(Constants.Intake.Is_Intakeright_Inverted);
 
-        m_solenoidleft = new Solenoid(Constants.Intake.Left_Solenoid_Port);
-        m_solenoidrght = new Solenoid(Constants.Intake.Right_Solenoid_Port);
+        //m_solenoidleft = new Solenoid(Constants.Intake.Left_Solenoid_Port);
+        //m_solenoidrght = new Solenoid(Constants.Intake.Right_Solenoid_Port);
 
         //navX
         ahrs = new AHRS(SPI.Port.kMXP);
