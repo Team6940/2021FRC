@@ -18,7 +18,6 @@ import frc.robot.subsystems.shooter.commands.ShooterOn;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.auto.Autonomous;
 import frc.robot.subsystems.balltrans.BallTrans;
-import frc.robot.subsystems.balltrans.commands.BallTransCmd;
 import frc.robot.subsystems.balltrans.commands.BallTransOff;
 import frc.robot.subsystems.balltrans.commands.BallTransOn;
 import frc.robot.subsystems.drive.*;
@@ -91,7 +90,7 @@ public class RobotContainer {
   //Set default command
   m_Drive.setDefaultCommand(new DriveCmd());
   m_Shooter.setDefaultCommand(new ShootCmd());
-  m_BallTrans.setDefaultCommand(new BallTransCmd());
+  //m_BallTrans.setDefaultCommand(new BallTransCmd());
 
   //set autoCommand
   m_autoCommand = new Autonomous();

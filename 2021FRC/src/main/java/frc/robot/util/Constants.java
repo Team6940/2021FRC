@@ -7,7 +7,6 @@
 
 package frc.robot.util;
 
-import com.ctre.phoenix.motorcontrol.can.BaseMotorControllerConfiguration;
 
 public class Constants {
     private static final double PI = Math.PI;
@@ -153,8 +152,8 @@ public class Constants {
         public static final int Right_Shooter_Port = 6;
 
         // ball transpoer motor
-        public static final int Left_Balltrans_Port = 1;
-        public static final int Right_Balltrans_Port = 2;
+        public static final int Left_Balltrans_Port = 7;
+        public static final int Right_Balltrans_Port = 8;
 
         public static final boolean IS_Balltransleft_INVERTED = false;
         public static final boolean IS_BalltransRight_INVERTED = true;
@@ -261,8 +260,8 @@ public class Constants {
     public class Intake{
 
         // motor
-        public static final int Left_Intake_Port = 3;
-        public static final int Right_Intake_Port = 4;
+        public static final int Left_Intake_Port = 9;
+        public static final int Right_Intake_Port = 10;
 
         public static final boolean Is_Intakeleft_Inverted = true;
         public static final boolean Is_Intakeright_Inverted = false;
