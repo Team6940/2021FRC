@@ -8,14 +8,19 @@
 package frc.robot.subsystems.drive;
 
 import frc.robot.Robot;
+import frc.robot.util.Constants;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX; 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
@@ -33,9 +38,13 @@ public class Drive extends SubsystemBase {
   public WPI_TalonFX m_leftFollower;
   public WPI_TalonFX m_rghtFront;
   public WPI_TalonFX m_rghtFollower;
+  public Encoder m_leftEncoder;
+  public Encoder m_rghtEncoder;
 
   public DifferentialDrive m_diffDrive;
+  public DifferentialDriveOdometry m_odometry;
 
+  public AHRS m_navx;
 
   //Limelight
   public NetworkTable m_limTable;
@@ -61,18 +70,30 @@ public class Drive extends SubsystemBase {
     m_leftFollower = Robot.hardware.m_leftFollower;
     m_rghtFront = Robot.hardware.m_rghtFront;
     m_rghtFollower = Robot.hardware.m_rghtFollower;
+    m_leftEncoder = Robot.hardware.m_leftEncoder;
+    m_rghtEncoder = Robot.hardware.m_rghtEncoder;
   
     m_diffDrive = Robot.hardware.m_diffDrive;
+    m_odometry = Robot.hardware.m_odometry;
+
+    m_navx = Robot.hardware.m_navx;
+
+    // Sets the distance per pulse for the encoders
+    m_leftEncoder.setDistancePerPulse(Constants.DriveConstants.kEncoderDistancePerPulse);
+    m_rghtEncoder.setDistancePerPulse(Constants.DriveConstants.kEncoderDistancePerPulse);
+    
+    resetEncoders();
+
     m_limTable = NetworkTableInstance.getDefault().getTable("limelight");
     m_diffDrive.setMaxOutput(speed1);
 
-    //navX
-    m_ahrs = Robot.hardware.ahrs;
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    // Update the odometry in the periodic block
+    m_odometry.update(m_navx.getRotation2d(), m_leftEncoder.getDistance(),
+                      m_rghtEncoder.getDistance());
   }
 
   @Override
@@ -146,4 +167,114 @@ public void enableMotors(boolean on){
   m_rghtFollower.setNeutralMode(mode);
   //coast++;
 }
+
+/**
+  * Resets the drive encoders to currently read a position of 0.
+  */
+public void resetEncoders() {
+  m_leftEncoder.reset();
+  m_rghtEncoder.reset();
+}
+
+/**
+  * Returns the currently-estimated pose of the robot.
+  *
+  * @return The pose.
+  */
+public Pose2d getPose() {
+  return m_odometry.getPoseMeters();
+}
+
+/**
+  * Returns the current wheel speeds of the robot.
+  *
+  * @return The current wheel speeds.
+  */
+public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+  return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rghtEncoder.getRate());
+}
+
+/**
+  * Resets the odometry to the specified pose.
+  *
+  * @param pose The pose to which to set the odometry.
+  */
+public void resetOdometry(Pose2d pose) {
+  resetEncoders();
+  m_odometry.resetPosition(pose, m_navx.getRotation2d());
+}
+
+/**
+  * Controls the left and right sides of the drive directly with voltages.
+  *
+  * @param leftVolts  the commanded left output
+  * @param rightVolts the commanded right output
+  */
+public void tankDriveVolts(double leftVolts, double rightVolts) {
+  m_leftFront.setVoltage(leftVolts);
+  m_rghtFront.setVoltage(-rightVolts);
+  m_diffDrive.feed();
+}
+
+/**
+  * Gets the average distance of the two encoders.
+  *
+  * @return the average of the two encoder readings
+  */
+public double getAverageEncoderDistance() {
+  return (m_leftEncoder.getDistance() + m_rghtEncoder.getDistance()) / 2.0;
+}
+
+/**
+  * Gets the left drive encoder.
+  *
+  * @return the left drive encoder
+  */
+public Encoder getLeftEncoder() {
+  return m_leftEncoder;
+}
+
+/**
+  * Gets the right drive encoder.
+  *
+  * @return the right drive encoder
+  */
+public Encoder getRightEncoder() {
+  return m_rghtEncoder;
+}
+
+/**
+  * Sets the max output of the drive.  Useful for scaling the drive to drive more slowly.
+  *
+  * @param maxOutput the maximum output to which the drive will be constrained
+  */
+public void setMaxOutput(double maxOutput) {
+  m_diffDrive.setMaxOutput(maxOutput);
+}
+
+/**
+  * Zeroes the heading of the robot.
+  */
+public void zeroHeading() {
+  m_navx.reset();
+}
+
+/**
+  * Returns the heading of the robot.
+  *
+  * @return the robot's heading in degrees, from -180 to 180
+  */
+public double getHeading() {
+  return m_navx.getRotation2d().getDegrees();
+}
+
+/**
+  * Returns the turn rate of the robot.
+  *
+  * @return The turn rate of the robot, in degrees per second
+  */
+public double getTurnRate() {
+  return -m_navx.getRate();
+}
+
 }

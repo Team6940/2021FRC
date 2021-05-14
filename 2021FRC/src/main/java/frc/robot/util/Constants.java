@@ -7,6 +7,7 @@
 
 package frc.robot.util;
 
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 
 public class Constants {
     private static final double PI = Math.PI;
@@ -25,16 +26,9 @@ public class Constants {
         // "soft boot" parameter
         public static final double Loop_Parameter = 10;
 
-        // solenoid
-        public static final int DRIVE_STATE_PORT = 6;
-
         // unit conversion
         public static final double kDriveTick2Feet = 1.0 / 2048  * 6 * Math.PI / 12;
 
-
-    }
-
-    public class ColorSensor{
 
     }
 
@@ -65,8 +59,8 @@ public class Constants {
         public static final double StopLime_ThresholdRght = 2.5;
 
         // Set PID parameters.
-        public static final double KpAim = 0.1;
-        public static final double KpDistance = 0.1;
+        public static final double KpAim = -0.1;
+        public static final double KpDistance = -0.1;
 
         public static final double min_command = 0.05;
         
@@ -85,17 +79,33 @@ public class Constants {
         public static final int kLeftMotor2Port = 1;
         public static final int kRightMotor1Port = 2;
         public static final int kRightMotor2Port = 3;
-      
+    
         public static final int[] kLeftEncoderPorts = new int[] {0, 1};
         public static final int[] kRightEncoderPorts = new int[] {2, 3};
         public static final boolean kLeftEncoderReversed = false;
         public static final boolean kRightEncoderReversed = true;
-      
+    
+        public static final double kTrackwidthMeters = 0.69;
+        public static final DifferentialDriveKinematics kDriveKinematics =
+            new DifferentialDriveKinematics(kTrackwidthMeters);
+    
         public static final int kEncoderCPR = 1024;
-        public static final double kWheelDiameterInches = 6;
+        public static final double kWheelDiameterMeters = 0.15;
         public static final double kEncoderDistancePerPulse =
-             // Assumes the encoders are directly mounted on the wheel shafts
-            (kWheelDiameterInches * Math.PI) / (double) kEncoderCPR;
+            // Assumes the encoders are directly mounted on the wheel shafts
+            (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
+    
+        // These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
+        // These characterization values MUST be determined either experimentally or theoretically
+        // for *your* robot's drive.
+        // The Robot Characterization Toolsuite provides a convenient tool for obtaining these
+        // values for your robot.
+        public static final double ksVolts = 0.22;
+        public static final double kvVoltSecondsPerMeter = 1.98;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+    
+        // Example value only - as above, this must be tuned for your drive!
+        public static final double kPDriveVel = 8.5;
         }
       
     public static final class ShooterConstants {
@@ -131,14 +141,14 @@ public class Constants {
         }
 
         public static final class AutoConstants {
-            public static final double kAutoTimeoutSeconds = 12;
-            public static final double kAutoShootTimeSeconds = 7;
+            public static final double kMaxSpeedMetersPerSecond = 3;
+            public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+        
+            // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+            public static final double kRamseteB = 2;
+            public static final double kRamseteZeta = 0.7;
           }
     
-    public class Button{
-        public static final int kA = 1;
-    }
-
     public class shooter{
 
         // motor
@@ -164,99 +174,6 @@ public class Constants {
 
     }
 
-    public class Gyro{
-
-         // PID for gyro
-         public static final double DRIVE_KP = 0.01;
-         public static final double DRIVE_KI = 0.00;
-         public static final double DRIVE_KD = 0.00;
-         public static final double DRIVE_KF = 0.00;
-
-         public static final double ABSOLUTE_TOLERANCE = 2.0;
-         public static final double GYRO_MAX_INPUT = 180;
-         public static final double GYRO_MAX_OUTPUT = 0.75;
-         public static final boolean IS_GYRO_CONTINUOUS = true;
-
-    }
-
-    public class Input{
-
-        // driver sticks are aero-sticks using JoystickWrapper
-        // operator and climb sticks are X-box sticks
-        public static final int DRIVER_Left_PORT = 0;
-        public static final int DRIVER_Right_PORT = 1;
-        public static final int OPERATOR_PORT = 2;
-        public static final int CLIMB_STICK_PORT = 3;
-
-        // driver left buttons
-        public static final int LIMELIGHT_BUTTON = 1;
-
-        // driver right buttons
-        public static final int DRIVE_STRAIGHT_BUTTON = 2;
-        public static final int SHIFT_DRIVESTATE_BUTTON = 1;
-
-        // operator buttons
-        public static final int INTAKE_DOWN_BUTTON = 1;
-        public static final int INTAKE_UP_BUTTON = 2;
-        public static final int CARGO_OUTPUT_BUTTON = 3;
-        public static final int PANEL_IN_BUTTON = 5;
-        public static final int PANEL_OUT_BUTTON= 6;
-
-        // climb stick buttons
-        public static final int ELEVATOR_FOR_CLIMB_BUTTON = 1;
-        public static final int SWITCH_STATUS_BUTTON = 2;
-        public static final int CLIMB_UP_BUTTON = 3;
-        public static final int MOVE_FORWARD_BUTTON = 4;
-        public static final int CLIMB_WITH_JOYSTICK_BUTTON = 5;
-        public static final int TRIPLE_WITH_JOYSTICK_BUTTON = 6;
-
-        // limit switch
-        public static final int SWITCH_ELEVATOR_DOWN = 0;
-        public static final int SWITCH_ELEVATOR_UP = 2;
-        public static final int SWITCH_CARGO = 9;
-
-        // operator pov
-        public static final int ELEVATOR_DOWN_POV = 180;
-        public static final int ELEVATOR_LEVEL1_POV = 90;
-        public static final int ELEVATOR_LEVEL2_POV = 270;
-        public static final int ELEVATOR_LEVEL3_POV = 0;
-
-    }
-
-    public class Elevator{
-
-        // motors
-        public static final int ELEVATOR_1_PORT = 5;
-        public static final int ELEVATOR_2_PORT = 6;
-        public static final int ELEVATOR_3_PORT = 7;
-        public static final int ELEVATOR_4_PORT = 8;
-
-        public static final boolean IS_E1_INVERTED = true;
-        public static final boolean IS_E2_INVERTED = false;
-        public static final boolean IS_E3_INVERTED = true;
-        public static final boolean IS_E4_INVERTED = true;
-
-        // PID
-        public static final double ELEVATOR_P = 0.01;
-        public static final double ELEVATOR_I = -0.0001;
-        public static final double ELEVATOR_D = 0.00;
-        public static final double ELEVATOR_F = 0.00;
-        public static final int ELEVATOR_TIMEOUT = 30; // in millsecond
-
-        // position
-        public static final double ELEVATOR_LEVEL1_HEIGHT = 46000;
-        public static final double ELEVATOR_LEVEL2_HEIGHT = 230000;
-        public static final double ELEVATOR_LEVEL3_HEIGHT = 405000;
-        public static final double ELEVATOR_CLIMB_HEIGHT = 300000;
-        public static final double ELEVATOR_DOWN_HEIGHT = 0.00;
-
-        public static final double ELEVATOR_DOWN_PERCENT_OUTPUT =  -0.5;
-
-        // solenoid
-        public static final int ELEVATOR_STATE_PORT = 3;
-
-    }
-
     public class Intake{
 
         // motor
@@ -278,33 +195,8 @@ public class Constants {
         public static final double Intake_Stop_Speed = 0;
     }
 
-    public class Climb{
-
-        // motor
-        public static final int TRIPLE_LEFT_PORT = 13;
-        public static final int TRIPLE_RIGHT_PORT = 14;
-        public static final int CLIMB_FORWARD_PORT = 15;
-
-        // solenoid
-        public static final int CLIME_SOLENOID_PORT = 7;
-        public static final int CLIME_OUT_PORT = 4;
-
-        public static final boolean IS_TRIPLELEFT_INVERTED = false;
-        public static final boolean IS_TRIPLERIGHT_INVERTED = true;
-        public static final boolean IS_FORWARD_INVERTED = false;
-
-        public static final double TRIPLE_DOWN_POSITION = 0.00;
-        public static final double TRIPLE_UP_POSITION = 0.00;
-
-        public static final double TRIPLE_KP = 0.01;
-        public static final double TRIPLE_KI = 0.00;
-        public static final double TRIPLE_KD = 0.00;
-        public static final double TRIPLE_KF = 0.00;
-        public static final int CLIMB_TIMEOUT = 30;
-
-        public static final double CLIMB_UP_PERCENTOUTPUT = 0.25;
-        public static final double CLIME_FORWARD_PERCENTOUTPUT = 0.5;
-
+    public class colorsensor{
+        public static final int Tuner_Port = 11;
     }
 
 }

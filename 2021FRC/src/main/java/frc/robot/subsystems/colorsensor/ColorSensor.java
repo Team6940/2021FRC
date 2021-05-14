@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems.colorsensor;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,6 +19,7 @@ public class ColorSensor extends SubsystemBase {
   /** Creates a new ColorSensor. */
   public final ColorSensorV3 m_ColorSensor;
   public final ColorMatch m_ColorMatcher;
+  public WPI_TalonSRX m_colorturner;
 
   private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
   private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
@@ -26,6 +29,7 @@ public class ColorSensor extends SubsystemBase {
   public ColorSensor() {
     m_ColorSensor = Robot.hardware.m_ColorSensor;
     m_ColorMatcher = Robot.hardware.m_ColorMatcher;
+    m_colorturner = Robot.hardware.m_colorturner;
 
     m_ColorMatcher.addColorMatch(kBlueTarget);
     m_ColorMatcher.addColorMatch(kGreenTarget);
@@ -39,6 +43,7 @@ public class ColorSensor extends SubsystemBase {
   }
 
   public void MatchColor(){
+    int testi=0;
     /**
      * The method GetColor() returns a normalized color value from the sensor and can be
      * useful if outputting the color to an RGB LED or similar. To
@@ -78,6 +83,42 @@ public class ColorSensor extends SubsystemBase {
     SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("Confidence", match.confidence);
     SmartDashboard.putString("Detected Color", colorString);
+
+
+    while(true){
+      if(match.color == kBlueTarget){
+        testi++;
+        break;
+      }
+      SmartDashboard.putNumber("test", testi);
+    }
+
+    String gameData;
+    gameData = DriverStation.getInstance().getGameSpecificMessage();
+    if(gameData.length() > 0)
+    {
+      switch (gameData.charAt(0))
+      {
+        case 'B' :
+          //Blue case code
+          break;
+        case 'G' :
+          //Green case code
+          break;
+        case 'R' :
+          //Red case code
+          break;
+        case 'Y' :
+          //Yellow case code
+          break;
+        default :
+          //This is corrupt data
+          break;
+      }
+    } else {
+      //Code for no data received yet
+    }
+
 
   }
 }

@@ -32,11 +32,18 @@
  */
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import frc.robot.util.RobotContainer;
 
 
@@ -56,6 +63,9 @@ public class Robot extends TimedRobot {
     Command m_autoCommand;
     SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+    String trajectoryJSON = "path/output/Auto1.wpilib.json";
+    public static Trajectory trajectory = new Trajectory();
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -67,6 +77,13 @@ public class Robot extends TimedRobot {
 
     hardware = new Hardware();
     m_RobotContainer = new RobotContainer();
+
+    try {
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+   } catch (IOException ex) {
+      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+   }
    
 
   }
@@ -122,6 +139,9 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     RobotContainer.m_Drive.enableMotors(false);
+    if (m_autoCommand != null) {
+      m_autoCommand.cancel();
+    }
   }
 
   

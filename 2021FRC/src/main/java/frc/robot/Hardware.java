@@ -18,12 +18,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorSensorV3;
 
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
 
@@ -37,6 +38,9 @@ public class Hardware {
     public WPI_TalonFX m_rghtFront;
     public WPI_TalonFX m_rghtFollower;
     public DifferentialDrive m_diffDrive;
+    public Encoder m_leftEncoder;
+    public Encoder m_rghtEncoder;
+    public DifferentialDriveOdometry m_odometry;
 
     // shooter
     public WPI_TalonFX m_shooterleft;
@@ -53,15 +57,12 @@ public class Hardware {
     public Solenoid m_solenoidrght;
 
     // navX sensor
-    public AHRS ahrs;
+    public AHRS m_navx;
 
     // color sensor
     public ColorSensorV3 m_ColorSensor; 
     public ColorMatch m_ColorMatcher;
-
-    // Intake
-    public Compressor m_compressor;
-    public DoubleSolenoid hatchIntake = new DoubleSolenoid(0,1);
+    public WPI_TalonSRX m_colorturner;
 
     public Hardware(){
 
@@ -75,6 +76,18 @@ public class Hardware {
 
         m_diffDrive.setMaxOutput(Constants.Drivebase.Initial_Speed);
         m_diffDrive.setDeadband(0.05);
+
+        m_leftEncoder = 
+            new Encoder(
+                Constants.DriveConstants.kLeftEncoderPorts[0],
+                Constants.DriveConstants.kLeftEncoderPorts[1],
+                Constants.DriveConstants.kLeftEncoderReversed);
+        
+        m_rghtEncoder =
+            new Encoder(
+                Constants.DriveConstants.kRightEncoderPorts[0],
+                Constants.DriveConstants.kRightEncoderPorts[1],
+                Constants.DriveConstants.kRightEncoderReversed);
         
         /* factory default values */
         //m_rghtFront.configFactoryDefault();
@@ -145,17 +158,19 @@ public class Hardware {
         m_intakeleft.setInverted(Constants.Intake.Is_Intakeleft_Inverted);
         m_intakerght.setInverted(Constants.Intake.Is_Intakeright_Inverted);
 
-        //m_solenoidleft = new Solenoid(Constants.Intake.Left_Solenoid_Port);
-        //m_solenoidrght = new Solenoid(Constants.Intake.Right_Solenoid_Port);
+        m_solenoidleft = new Solenoid(Constants.Intake.Left_Solenoid_Port);
+        m_solenoidrght = new Solenoid(Constants.Intake.Right_Solenoid_Port);
 
         //navX
-        ahrs = new AHRS(SPI.Port.kMXP);
+        m_navx = new AHRS(SPI.Port.kMXP);
 
         // Color Sensor
         m_ColorSensor = new ColorSensorV3(I2C.Port.kOnboard);
         m_ColorMatcher = new ColorMatch();
+        m_colorturner = new WPI_TalonSRX(Constants.colorsensor.Tuner_Port);
         
-
+        // odometry
+        m_odometry = new DifferentialDriveOdometry(m_navx.getRotation2d());
     }
 
     

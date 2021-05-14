@@ -58,10 +58,9 @@ public class limelighton extends CommandBase {
     distance_adjust = KpDistance * distance_error;
 
     left_command += steering_adjust + distance_adjust;
-    rght_command -= steering_adjust + distance_adjust;
+    rght_command += steering_adjust + distance_adjust;
 
     Robot.hardware.m_diffDrive.tankDrive(left_command, rght_command);
-
     test ++;
     SmartDashboard.putNumber("test",test);
 
