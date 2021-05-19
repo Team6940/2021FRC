@@ -2,14 +2,17 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.auto;
+package frc.robot.subsystems.colorsensor.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.util.Constants;
+import frc.robot.util.RobotContainer;
 
-public class getAutonomousCommand extends CommandBase {
-  /** Creates a new getAutonomousCommand. */
-  public getAutonomousCommand() {
+public class turnpanel extends CommandBase {
+  /** Creates a new turnpanel. */
+  public turnpanel() {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(RobotContainer.m_colorsensor);
   }
 
   // Called when the command is initially scheduled.
@@ -18,7 +21,10 @@ public class getAutonomousCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    RobotContainer.m_colorsensor.MotorWithPower(Constants.colorsensor.turner_power);
+    RobotContainer.m_colorsensor.TurnPanel();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -27,6 +33,6 @@ public class getAutonomousCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return RobotContainer.m_colorsensor.flag_command;
   }
 }

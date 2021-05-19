@@ -24,12 +24,13 @@ import frc.robot.subsystems.shooter.commands.ShooterOn;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Robot;
-import frc.robot.auto.Autonomous;
 import frc.robot.subsystems.balltrans.BallTrans;
 import frc.robot.subsystems.balltrans.commands.BallTransOff;
 import frc.robot.subsystems.balltrans.commands.BallTransOn;
 import frc.robot.subsystems.colorsensor.ColorSensor;
+import frc.robot.subsystems.colorsensor.commands.getcolor;
 import frc.robot.subsystems.colorsensor.commands.matchcolor;
+import frc.robot.subsystems.colorsensor.commands.turnpanel;
 import frc.robot.subsystems.drive.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -64,12 +65,13 @@ public class RobotContainer {
 
   // color sensor button
   public static JoystickButton matchcolorbutton;
+  public static JoystickButton turnpanelbutton;
 
   // The robot's subsystems and commands are defined here...
 
   // DriveBase
   public static Drive m_Drive;
-  public Autonomous m_autoCommand;
+  public Command m_autoCommand;
 
   // Shooter
   public static Shooter m_Shooter;
@@ -98,6 +100,7 @@ public class RobotContainer {
   pushintakebutton = new JoystickButton(m_operatorjoystick, 5);
   backintakebutton = new JoystickButton(m_operatorjoystick, 6);
   matchcolorbutton = new JoystickButton(m_operatorjoystick,3);
+  turnpanelbutton = new JoystickButton(m_driverjoystick, 1);
 
   //set subsystems
   m_Drive = new Drive(); 
@@ -109,10 +112,8 @@ public class RobotContainer {
   //Set default command
   m_Drive.setDefaultCommand(new DriveCmd());
   m_Shooter.setDefaultCommand(new ShootCmd());
+  m_colorsensor.setDefaultCommand(new getcolor());
   //m_BallTrans.setDefaultCommand(new BallTransCmd());
-
-  //set autoCommand
-  m_autoCommand = new Autonomous();
 
   // Configure the button bindings
 
@@ -136,6 +137,7 @@ public class RobotContainer {
     pushintakebutton.whenPressed(new Ballin());
     backintakebutton.whenPressed(new Ballout());
     matchcolorbutton.whenHeld(new matchcolor());
+    turnpanelbutton.whenPressed(new turnpanel());
 
   }
 

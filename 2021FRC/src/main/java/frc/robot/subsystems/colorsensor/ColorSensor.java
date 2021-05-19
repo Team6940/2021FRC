@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.colorsensor;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
@@ -21,15 +23,30 @@ public class ColorSensor extends SubsystemBase {
   public final ColorMatch m_ColorMatcher;
   public WPI_TalonSRX m_colorturner;
 
+  // set parameters
+  private Integer num;
+  public boolean flag_command;
+  private boolean flag_whetheryellow;
+  private boolean flag_whethernotyellow;
+
   private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
   private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
   private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
   private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
+  // set color inits
+  public Color detectedColor;
+  public Color nowColor; 
+
   public ColorSensor() {
     m_ColorSensor = Robot.hardware.m_ColorSensor;
     m_ColorMatcher = Robot.hardware.m_ColorMatcher;
     m_colorturner = Robot.hardware.m_colorturner;
+
+    num = 0;
+    flag_command = false;
+    flag_whetheryellow = false;
+    flag_whethernotyellow = true;
 
     m_ColorMatcher.addColorMatch(kBlueTarget);
     m_ColorMatcher.addColorMatch(kGreenTarget);
@@ -42,8 +59,27 @@ public class ColorSensor extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  public void MotorWithPower(double turner_power){
+    m_colorturner.set(ControlMode.PercentOutput,turner_power);
+  }
+
+  public void StopMotor(){
+    m_colorturner.setNeutralMode(NeutralMode.Brake);
+  }
+
+  public void GetColor(){
+    detectedColor = m_ColorSensor.getColor();
+  }
+
+  public void StopPanelWithColor(Color color){
+    GetColor();
+    ColorMatchResult match = m_ColorMatcher.matchClosestColor(detectedColor);
+    if(match.color == color){
+      StopMotor();
+    }
+  }
+
   public void MatchColor(){
-    int testi=0;
     /**
      * The method GetColor() returns a normalized color value from the sensor and can be
      * useful if outputting the color to an RGB LED or similar. To
@@ -54,15 +90,15 @@ public class ColorSensor extends SubsystemBase {
      * an object is the more light from the surroundings will bleed into the 
      * measurements and make it difficult to accurately determine its color.
      */
-    Color detectedColor = m_ColorSensor.getColor();
+    //Color detectedColor = m_ColorSensor.getColor();
 
     /**
      * Run the color match algorithm on our detected color
      */
-    String colorString;
-    ColorMatchResult match = m_ColorMatcher.matchClosestColor(detectedColor);
+    //String colorString;
+    //ColorMatchResult match = m_ColorMatcher.matchClosestColor(detectedColor);
 
-    if (match.color == kBlueTarget) {
+    /*if (match.color == kBlueTarget) {
       colorString = "Blue";
     } else if (match.color == kRedTarget) {
       colorString = "Red";
@@ -72,26 +108,17 @@ public class ColorSensor extends SubsystemBase {
       colorString = "Yellow";
     } else {
       colorString = "Unknown";
-    }
+    }*/
 
         /**
      * Open Smart Dashboard or Shuffleboard to see the color detected by the 
      * sensor.
      */
-    SmartDashboard.putNumber("Red", detectedColor.red);
+    /*SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("Confidence", match.confidence);
-    SmartDashboard.putString("Detected Color", colorString);
-
-
-    while(true){
-      if(match.color == kBlueTarget){
-        testi++;
-        break;
-      }
-      SmartDashboard.putNumber("test", testi);
-    }
+    SmartDashboard.putString("Detected Color", colorString);*/
 
     String gameData;
     gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -101,15 +128,19 @@ public class ColorSensor extends SubsystemBase {
       {
         case 'B' :
           //Blue case code
+          StopPanelWithColor(kBlueTarget);
           break;
         case 'G' :
           //Green case code
+          StopPanelWithColor(kGreenTarget);
           break;
         case 'R' :
           //Red case code
+          StopPanelWithColor(kRedTarget);
           break;
         case 'Y' :
           //Yellow case code
+          StopPanelWithColor(kYellowTarget);
           break;
         default :
           //This is corrupt data
@@ -118,7 +149,36 @@ public class ColorSensor extends SubsystemBase {
     } else {
       //Code for no data received yet
     }
-
-
   }
+
+public void TurnPanel(){
+  GetColor();
+  ColorMatchResult match = m_ColorMatcher.matchClosestColor(detectedColor);
+  nowColor = ColorMatch.makeColor(0.361, 0.524, 0.113);
+  /*if(match.color == kYellowTarget){
+    flag_whetheryellow = true;
+    }
+
+  if(match.color != kYellowTarget){
+    flag_whethernotyellow = true;
+  }
+
+  if(flag_whetheryellow = true && flag_whethernotyellow == true){
+    num += 1;
+  }*/
+
+  if(match.color != nowColor){
+    nowColor = match.color;
+    num += 1;
+  }
+
+  if(num == 32){
+    flag_command = true;
+    StopMotor();
+  }
+
+  SmartDashboard.putNumber("num", num);
+}
+
+
 }
