@@ -12,7 +12,6 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -23,12 +22,6 @@ public class ColorSensor extends SubsystemBase {
   public final ColorMatch m_ColorMatcher;
   public WPI_TalonSRX m_colorturner;
 
-  // set parameters
-  private Integer num;
-  public boolean flag_command;
-  private boolean flag_whetheryellow;
-  private boolean flag_whethernotyellow;
-
   private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
   private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
   private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
@@ -36,17 +29,11 @@ public class ColorSensor extends SubsystemBase {
 
   // set color inits
   public Color detectedColor;
-  public Color nowColor; 
 
   public ColorSensor() {
     m_ColorSensor = Robot.hardware.m_ColorSensor;
     m_ColorMatcher = Robot.hardware.m_ColorMatcher;
     m_colorturner = Robot.hardware.m_colorturner;
-
-    num = 0;
-    flag_command = false;
-    flag_whetheryellow = false;
-    flag_whethernotyellow = true;
 
     m_ColorMatcher.addColorMatch(kBlueTarget);
     m_ColorMatcher.addColorMatch(kGreenTarget);
@@ -79,6 +66,24 @@ public class ColorSensor extends SubsystemBase {
     }
   }
 
+  public boolean isColorChanged(Color TargetColor){
+    Color detectedColor = m_ColorSensor.getColor();
+    ColorMatchResult match = m_ColorMatcher.matchClosestColor(detectedColor);
+    if (match.color == TargetColor) {
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
+  public Color MatchCurrentColor(){
+    Color detectedColor = m_ColorSensor.getColor();
+    ColorMatchResult match = m_ColorMatcher.matchClosestColor(detectedColor);
+    return match.color;
+
+  }
+
   public void MatchColor(){
     /**
      * The method GetColor() returns a normalized color value from the sensor and can be
@@ -90,35 +95,6 @@ public class ColorSensor extends SubsystemBase {
      * an object is the more light from the surroundings will bleed into the 
      * measurements and make it difficult to accurately determine its color.
      */
-    //Color detectedColor = m_ColorSensor.getColor();
-
-    /**
-     * Run the color match algorithm on our detected color
-     */
-    //String colorString;
-    //ColorMatchResult match = m_ColorMatcher.matchClosestColor(detectedColor);
-
-    /*if (match.color == kBlueTarget) {
-      colorString = "Blue";
-    } else if (match.color == kRedTarget) {
-      colorString = "Red";
-    } else if (match.color == kGreenTarget) {
-      colorString = "Green";
-    } else if (match.color == kYellowTarget) {
-      colorString = "Yellow";
-    } else {
-      colorString = "Unknown";
-    }*/
-
-        /**
-     * Open Smart Dashboard or Shuffleboard to see the color detected by the 
-     * sensor.
-     */
-    /*SmartDashboard.putNumber("Red", detectedColor.red);
-    SmartDashboard.putNumber("Green", detectedColor.green);
-    SmartDashboard.putNumber("Blue", detectedColor.blue);
-    SmartDashboard.putNumber("Confidence", match.confidence);
-    SmartDashboard.putString("Detected Color", colorString);*/
 
     String gameData;
     gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -150,35 +126,4 @@ public class ColorSensor extends SubsystemBase {
       //Code for no data received yet
     }
   }
-
-public void TurnPanel(){
-  GetColor();
-  ColorMatchResult match = m_ColorMatcher.matchClosestColor(detectedColor);
-  nowColor = ColorMatch.makeColor(0.361, 0.524, 0.113);
-  /*if(match.color == kYellowTarget){
-    flag_whetheryellow = true;
-    }
-
-  if(match.color != kYellowTarget){
-    flag_whethernotyellow = true;
-  }
-
-  if(flag_whetheryellow = true && flag_whethernotyellow == true){
-    num += 1;
-  }*/
-
-  if(match.color != nowColor){
-    nowColor = match.color;
-    num += 1;
-  }
-
-  if(num == 32){
-    flag_command = true;
-    StopMotor();
-  }
-
-  SmartDashboard.putNumber("num", num);
-}
-
-
 }
