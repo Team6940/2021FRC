@@ -6,7 +6,7 @@ package frc.robot.subsystems.balltrans;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -15,8 +15,8 @@ import frc.robot.util.Constants;
 public class BallTrans extends SubsystemBase {
   /** Creates a new BallTrans. */
   // ball transport motor
-  public WPI_TalonSRX m_balltransleft;
-  public WPI_TalonSRX m_balltransrght;
+  public WPI_VictorSPX m_balltransleft;
+  public WPI_VictorSPX m_balltransrght;
 
   public boolean m_balltrans_switch;
 
@@ -30,17 +30,22 @@ public class BallTrans extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void BalltransWithPower(double ball_power){
-    m_balltransleft.set(ControlMode.PercentOutput,ball_power);
-    m_balltransrght.set(ControlMode.PercentOutput,ball_power);
+  public void BalltransWithPower(){
+    m_balltransleft.set(ControlMode.PercentOutput,Constants.shooter.Left_BallTrans_On_Power);
+    m_balltransrght.set(ControlMode.PercentOutput,Constants.shooter.Rght_BallTrans_On_Power); 
+  }
+
+  public void StopBalltrans(){
+    m_balltransleft.set(ControlMode.PercentOutput,Constants.shooter.BallTrans_Off_Power);
+    m_balltransrght.set(ControlMode.PercentOutput,Constants.shooter.BallTrans_Off_Power); 
   }
 
   public void OutputBalltrans(){
     if(m_balltrans_switch){
-      BalltransWithPower(Constants.shooter.BallTrans_On_Power);
+      BalltransWithPower();
     }
     else{
-      BalltransWithPower(Constants.shooter.BallTrans_Off_Power);
+      StopBalltrans();
     }
   }
 

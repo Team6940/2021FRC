@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
@@ -47,12 +48,12 @@ public class Hardware {
     public WPI_TalonFX m_shooterright;
     
     // ball transport motors in front of the shooter 
-    public WPI_TalonSRX m_balltransleft;
-    public WPI_TalonSRX m_balltransrght;
+    public WPI_VictorSPX m_balltransleft;
+    public WPI_VictorSPX m_balltransrght;
 
     // intake
-    public WPI_TalonSRX m_intakeleft;
-    public WPI_TalonSRX m_intakerght;
+    public WPI_VictorSPX m_intakeleft;
+    public WPI_VictorSPX  m_intakerght;
     public Solenoid m_solenoidleft;
     public Solenoid m_solenoidrght;
 
@@ -145,15 +146,15 @@ public class Hardware {
         m_shooterright.setInverted(Constants.shooter.IS_RightShooter_INVERTED);
 
         // ball transport motor
-        m_balltransleft = new WPI_TalonSRX(Constants.shooter.Left_Balltrans_Port);
-        m_balltransrght = new WPI_TalonSRX(Constants.shooter.Right_Balltrans_Port);
+        m_balltransleft = new WPI_VictorSPX(Constants.shooter.Left_Balltrans_Port);
+        m_balltransrght = new WPI_VictorSPX(Constants.shooter.Right_Balltrans_Port);
 
         m_balltransleft.setInverted(Constants.shooter.IS_Balltransleft_INVERTED);
         m_balltransrght.setInverted(Constants.shooter.IS_BalltransRight_INVERTED);
 
         // intake
-        m_intakeleft = new WPI_TalonSRX(Constants.Intake.Left_Intake_Port);
-        m_intakerght = new WPI_TalonSRX(Constants.Intake.Right_Intake_Port);
+        m_intakeleft = new WPI_VictorSPX(Constants.Intake.Left_Intake_Port);
+        m_intakerght = new WPI_VictorSPX(Constants.Intake.Right_Intake_Port);
 
         m_intakeleft.setInverted(Constants.Intake.Is_Intakeleft_Inverted);
         m_intakerght.setInverted(Constants.Intake.Is_Intakeright_Inverted);

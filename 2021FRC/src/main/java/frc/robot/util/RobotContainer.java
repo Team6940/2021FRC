@@ -4,7 +4,6 @@
 
 package frc.robot.util;
 
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
@@ -14,25 +13,24 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.subsystems.drive.commands.*;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.commands.BallCmd;
 import frc.robot.subsystems.intake.commands.Ballin;
 import frc.robot.subsystems.intake.commands.Ballout;
-import frc.robot.subsystems.limelight.limelighton;
+import frc.robot.subsystems.intake.commands.Solenoidin;
+import frc.robot.subsystems.intake.commands.Solenoidout;
+import frc.robot.subsystems.limelight.photonlime;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.commands.ShootCmd;
-import frc.robot.subsystems.shooter.commands.ShooterOff;
-import frc.robot.subsystems.shooter.commands.ShooterOn;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.balltrans.BallTrans;
-import frc.robot.subsystems.balltrans.commands.BallTransOff;
-import frc.robot.subsystems.balltrans.commands.BallTransOn;
+import frc.robot.subsystems.balltrans.commands.BallTransCmd;
 import frc.robot.subsystems.colorsensor.ColorSensor;
 import frc.robot.subsystems.colorsensor.commands.getcolor;
 import frc.robot.subsystems.colorsensor.commands.matchcolor;
 import frc.robot.subsystems.colorsensor.commands.turnpanel;
 import frc.robot.subsystems.drive.*;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -45,8 +43,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
 
   //define Joystick
-  public static Joystick m_driverjoystick;
-  public static Joystick m_operatorjoystick;
+  public static XboxController m_joystick;
 
   //define fast&slow button
   public static JoystickButton fastButton;
@@ -62,6 +59,7 @@ public class RobotContainer {
   // intake button
   public static JoystickButton pushintakebutton;
   public static JoystickButton backintakebutton;
+  public static JoystickButton ballstartbutton;
 
   // color sensor button
   public static JoystickButton matchcolorbutton;
@@ -88,19 +86,17 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
   // set Joystick
-  m_driverjoystick = new Joystick(0);
-  m_operatorjoystick = new Joystick(1);
+  m_joystick = new XboxController(0);
  
   //set Joystick buttons
-  fastButton = new JoystickButton(m_driverjoystick, 3);
-  slowButton = new JoystickButton(m_driverjoystick, 4);
-  shooterButton = new JoystickButton(m_operatorjoystick, 1);
-  limelightButton = new JoystickButton(m_operatorjoystick, 5);
-  balltransButton = new JoystickButton(m_operatorjoystick, 2);
-  pushintakebutton = new JoystickButton(m_operatorjoystick, 5);
-  backintakebutton = new JoystickButton(m_operatorjoystick, 6);
-  matchcolorbutton = new JoystickButton(m_operatorjoystick,3);
-  turnpanelbutton = new JoystickButton(m_driverjoystick, 1);
+  //fastButton = new JoystickButton(m_driverjoystick, 3);
+  //slowButton = new JoystickButton(m_driverjoystick, 4);
+  limelightButton = new JoystickButton(m_joystick, 4);
+  pushintakebutton = new JoystickButton(m_joystick, 1);
+  backintakebutton = new JoystickButton(m_joystick, 3);
+  ballstartbutton = new JoystickButton(m_joystick, 2);
+  matchcolorbutton = new JoystickButton(m_joystick, 7);
+  turnpanelbutton = new JoystickButton(m_joystick, 8);
 
   //set subsystems
   m_Drive = new Drive(); 
@@ -112,9 +108,9 @@ public class RobotContainer {
   //Set default command
   m_Drive.setDefaultCommand(new DriveCmd());
   m_Shooter.setDefaultCommand(new ShootCmd());
+  m_BallTrans.setDefaultCommand(new BallTransCmd());
   m_colorsensor.setDefaultCommand(new getcolor());
-  //m_BallTrans.setDefaultCommand(new BallTransCmd());
-
+  m_intake.setDefaultCommand(new BallCmd());
   // Configure the button bindings
 
     configureButtonBindings();
@@ -127,17 +123,15 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    fastButton.whenPressed(new setThreshFast());
-    slowButton.whenPressed(new setThreshSlow());
-    shooterButton.whenHeld(new ShooterOn());
-    shooterButton.whenReleased(new ShooterOff());
-    limelightButton.whenHeld(new limelighton());
-    balltransButton.whenHeld(new BallTransOn());
-    balltransButton.whenReleased(new BallTransOff());
-    pushintakebutton.whenPressed(new Ballin());
-    backintakebutton.whenPressed(new Ballout());
+    //fastButton.whenPressed(new setThreshFast());
+    //slowButton.whenPressed(new setThreshSlow());
+    limelightButton.whenHeld(new photonlime());
     matchcolorbutton.whenHeld(new matchcolor());
     turnpanelbutton.whenPressed(new turnpanel());
+    pushintakebutton.whenPressed(new Solenoidout());
+    backintakebutton.whenPressed(new Solenoidin());
+    ballstartbutton.whenHeld(new Ballin());
+    ballstartbutton.whenReleased(new Ballout());
 
   }
 

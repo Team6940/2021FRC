@@ -49,6 +49,7 @@ public class turnpanel extends CommandBase {
         sumColors = sumColors+1;
         if(sumColors == 8){
           sumCycles = sumCycles + 1;
+          sumColors = 0;
         }
         if(sumCycles == 3){
           RobotContainer.m_colorsensor.StopMotor();

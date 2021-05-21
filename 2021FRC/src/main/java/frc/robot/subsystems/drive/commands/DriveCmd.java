@@ -5,6 +5,7 @@
 package frc.robot.subsystems.drive.commands;
 import frc.robot.util.RobotContainer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.GenericHID;
 
 /** An example command that uses an example subsystem. */
 public class DriveCmd extends CommandBase {
@@ -32,8 +33,8 @@ public class DriveCmd extends CommandBase {
     //todo
     double x =0;
     double z = 0;
-    x = RobotContainer.m_driverjoystick.getRawAxis(1);
-    z = RobotContainer.m_driverjoystick.getRawAxis(0);
+    x = RobotContainer.m_joystick.getY(GenericHID.Hand.kRight);
+    z = RobotContainer.m_joystick.getX(GenericHID.Hand.kRight);
     RobotContainer.m_Drive.DriveCar(x, z);
   }
 

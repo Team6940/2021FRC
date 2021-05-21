@@ -5,21 +5,24 @@
 package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.util.Constants;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   // motor
-  public WPI_TalonSRX m_intakeleft;
-  public WPI_TalonSRX m_intakerght;
+  public WPI_VictorSPX m_intakeleft;
+  public WPI_VictorSPX m_intakerght;
 
   // Solenoid
   public Solenoid m_solenoidleft;
   public Solenoid m_solenoidrght;
+
+  public boolean m_intake_switch = false;
 
   public Intake() {
     m_intakeleft = Robot.hardware.m_intakeleft;
@@ -43,4 +46,12 @@ public class Intake extends SubsystemBase {
     m_intakerght.set(ControlMode.PercentOutput,Intake_Power);
   }
 
+  public void OutputIntake(){
+    if(m_intake_switch){
+      IntakeWithPower(Constants.Intake.Intake_Start_Speed);
+    }
+    else{
+      IntakeWithPower(Constants.Intake.Intake_Stop_Speed);
+    }
+  }
 }

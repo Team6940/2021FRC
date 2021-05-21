@@ -5,6 +5,7 @@
 package frc.robot.subsystems.balltrans.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.util.RobotContainer;
 
 public class BallTransCmd extends CommandBase {
@@ -21,6 +22,14 @@ public class BallTransCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double b;
+    b = RobotContainer.m_joystick.getTriggerAxis(GenericHID.Hand.kLeft);
+    if(b > 0){
+      RobotContainer.m_BallTrans.m_balltrans_switch = true;
+    }
+    else{
+      RobotContainer.m_BallTrans.m_balltrans_switch = false;
+    }
     RobotContainer.m_BallTrans.OutputBalltrans();
   }
 

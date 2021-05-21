@@ -4,7 +4,8 @@
 
 package frc.robot.subsystems.shooter.commands;
 import frc.robot.util.RobotContainer;
-
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShootCmd extends CommandBase {
@@ -22,7 +23,15 @@ public class ShootCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.m_Shooter.Auto_Collimation();
+    double a = 0;
+    a = RobotContainer.m_joystick.getTriggerAxis(GenericHID.Hand.kRight);
+    SmartDashboard.putNumber("a", a);
+    if(a > 0){
+      RobotContainer.m_Shooter.m_shooter_switch = true;
+    }
+    else{
+      RobotContainer.m_Shooter.m_shooter_switch = false;
+    }
     RobotContainer.m_Shooter.OutputShooter();
   }
 

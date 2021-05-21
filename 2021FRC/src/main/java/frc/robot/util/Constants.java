@@ -10,7 +10,6 @@ package frc.robot.util;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 
 public class Constants {
-    private static final double PI = Math.PI;
 
     public class Drivebase{
 
@@ -38,26 +37,7 @@ public class Constants {
         public static final int LED_OFF = 1;
         public static final int LED_FLASH = 2;
         public static final int LED_ON = 3;
-
-        // Limelight parameters
-        /*These numbers must be tuned for your Robot! Be careful!*/
-        public static final double STEER_K = 0.03;             // how hard to turn toward the target
-        public static final double DRIVE_K = 0.8;              // how hard to drive fwd toward the target
-        public static final double DESIRED_TARGET_AREA = 0.3;  // Area of the target when the robot reaches the wall
-        public static final double MAX_DRIVE = 0.5;            // Simple speed limit so we don't drive too fast
-
-        // The height bewtween the centre of target and the ground.The unit is meter
-        public static final double Target_Height = 2.49555;
-
-        // Set the angle bewteen Limelight and the ground.
-        public static final double Limelight_Angle = PI/6;
-
-        // The Height between Shooter and the ground .
-        public static final double Shooter_Height = 0.45;
-
-        public static final double StopLime_ThresholdLeft = -2.5;
-        public static final double StopLime_ThresholdRght = 2.5;
-
+        
         // Set PID parameters.
         public static final double KpAim = -0.1;
         public static final double KpDistance = -0.1;
@@ -165,10 +145,11 @@ public class Constants {
         public static final int Left_Balltrans_Port = 7;
         public static final int Right_Balltrans_Port = 8;
 
-        public static final boolean IS_Balltransleft_INVERTED = false;
-        public static final boolean IS_BalltransRight_INVERTED = true;
+        public static final boolean IS_Balltransleft_INVERTED = true;
+        public static final boolean IS_BalltransRight_INVERTED = false;
 
-        public static final double BallTrans_On_Power = 1;
+        public static final double Left_BallTrans_On_Power = 1;
+        public static final double Rght_BallTrans_On_Power = 0.5;
         public static final double BallTrans_Off_Power = 0;
 
 
@@ -181,11 +162,11 @@ public class Constants {
         public static final int Right_Intake_Port = 10;
 
         public static final boolean Is_Intakeleft_Inverted = true;
-        public static final boolean Is_Intakeright_Inverted = false;
+        public static final boolean Is_Intakeright_Inverted = true;
 
         // solenoid
-        public static final int Left_Solenoid_Port = 1;
-        public static final int Right_Solenoid_Port = 2;
+        public static final int Left_Solenoid_Port = 0;
+        public static final int Right_Solenoid_Port = 1;
 
         public static final boolean Solenoid_Stop = false;
         public static final boolean Soenoid_Start = true;

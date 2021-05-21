@@ -5,7 +5,6 @@
 package frc.robot.subsystems.intake.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.util.Constants;
 import frc.robot.util.RobotContainer;
 
 public class Ballin extends CommandBase {
@@ -22,9 +21,7 @@ public class Ballin extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.m_intake.SolenoidWithSwitch(Constants.Intake.Soenoid_Start);
-    RobotContainer.m_intake.IntakeWithPower(Constants.Intake.Intake_Start_Speed);
-
+    RobotContainer.m_intake.m_intake_switch = true;
   }
 
   // Called once the command ends or is interrupted.
@@ -34,6 +31,6 @@ public class Ballin extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
