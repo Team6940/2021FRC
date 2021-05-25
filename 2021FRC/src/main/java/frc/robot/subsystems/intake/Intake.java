@@ -28,7 +28,6 @@ public class Intake extends SubsystemBase {
     m_intakeleft = Robot.hardware.m_intakeleft;
     m_intakerght = Robot.hardware.m_intakerght;
     m_solenoidleft = Robot.hardware.m_solenoidleft;
-    m_solenoidrght = Robot.hardware.m_solenoidrght;
   }
 
   @Override
@@ -38,7 +37,6 @@ public class Intake extends SubsystemBase {
 
   public void SolenoidWithSwitch(boolean on){
     m_solenoidleft.set(on);
-    m_solenoidrght.set(on);
   }
 
   public void IntakeWithPower(double Intake_Power){

@@ -23,7 +23,7 @@ public class Constants {
         public static final double Initial_Speed = 0.5;
 
         // "soft boot" parameter
-        public static final double Loop_Parameter = 10;
+        public static final double Loop_Parameter = 0.6;
 
         // unit conversion
         public static final double kDriveTick2Feet = 1.0 / 2048  * 6 * Math.PI / 12;
@@ -41,7 +41,6 @@ public class Constants {
         // Set PID parameters.
         public static final double KpAim = -0.1;
         public static final double KpDistance = -0.1;
-
         public static final double min_command = 0.05;
         
 
@@ -132,8 +131,11 @@ public class Constants {
     public class shooter{
 
         // motor
-        public static final double ShooterON_Percent_Output = 0.6;
+        public static final double ShooterON_Percent_Output = 0.59; //
         public static final double ShooterOff_Percent_Output = 0.00;
+
+        public static final double Shooter_Invert_Speed = - 0.1;
+        public static final double Balltrans_Invert_Speed = - 0.5;
 
         public static final boolean IS_LeftShooter_INVERTED = false;
         public static final boolean IS_RightShooter_INVERTED = true;
@@ -174,11 +176,13 @@ public class Constants {
         // motor speed
         public static final double Intake_Start_Speed = 1;
         public static final double Intake_Stop_Speed = 0;
+        public static final double Intake_Invert_Speed = - 0.5;
     }
 
     public class colorsensor{
         public static final int Tuner_Port = 11;
         public static final double turner_power = 0.5;
+        public static final int Color_Solenoid_Port = 1;
     }
 
 }

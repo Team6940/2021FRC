@@ -35,6 +35,7 @@ public class turnpanel extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    RobotContainer.m_colorsensor.putcolor();
     RobotContainer.m_colorsensor.MotorWithPower(Constants.colorsensor.turner_power);
     boolean changeColor = false;
     curColor = RobotContainer.m_colorsensor.MatchCurrentColor();

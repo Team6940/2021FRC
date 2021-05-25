@@ -8,7 +8,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.util.Constants;
@@ -19,13 +18,6 @@ public class Shooter extends SubsystemBase {
   public WPI_TalonFX m_shooterright;
 
   public boolean m_shooter_switch;
-
-  // Current Distance between robot and the target
-  public static double d;
-
-  public double startTime;
-
-  double time = Timer.getFPGATimestamp();
 
   /** Creates a new Shooter. */
   public Shooter() {
@@ -59,8 +51,6 @@ public class Shooter extends SubsystemBase {
   }
 
   public void invertShooter(){
-    if(time < 3 ){
-      
-    }
+    ShooterWithPower(Constants.shooter.Shooter_Invert_Speed);
   }
 }

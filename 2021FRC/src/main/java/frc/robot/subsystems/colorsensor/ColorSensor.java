@@ -12,6 +12,8 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -21,6 +23,10 @@ public class ColorSensor extends SubsystemBase {
   public final ColorSensorV3 m_ColorSensor;
   public final ColorMatch m_ColorMatcher;
   public WPI_TalonSRX m_colorturner;
+  public Solenoid m_solenoidcolor;
+
+  //  0 for push ,1 for back
+  public int push_or_back_flag = 0;
 
   private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
   private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
@@ -34,6 +40,7 @@ public class ColorSensor extends SubsystemBase {
     m_ColorSensor = Robot.hardware.m_ColorSensor;
     m_ColorMatcher = Robot.hardware.m_ColorMatcher;
     m_colorturner = Robot.hardware.m_colorturner;
+    m_solenoidcolor = Robot.hardware.m_solenoidcolor;
 
     m_ColorMatcher.addColorMatch(kBlueTarget);
     m_ColorMatcher.addColorMatch(kGreenTarget);
@@ -77,6 +84,34 @@ public class ColorSensor extends SubsystemBase {
     }
   }
 
+  public void putcolor(){
+    String colorString;
+    ColorMatchResult match = m_ColorMatcher.matchClosestColor(detectedColor);
+
+    if (match.color == kBlueTarget) {
+      colorString = "Blue";
+    } else if (match.color == kRedTarget) {
+      colorString = "Red";
+    } else if (match.color == kGreenTarget) {
+      colorString = "Green";
+    } else if (match.color == kYellowTarget) {
+      colorString = "Yellow";
+    } else {
+      colorString = "Unknown";
+
+          /**
+     * Open Smart Dashboard or Shuffleboard to see the color detected by the 
+     * sensor.
+     */
+    SmartDashboard.putNumber("Red", detectedColor.red);
+    SmartDashboard.putNumber("Green", detectedColor.green);
+    SmartDashboard.putNumber("Blue", detectedColor.blue);
+    SmartDashboard.putNumber("Confidence", match.confidence);
+    SmartDashboard.putString("Detected Color", colorString);
+    }
+
+  }
+
   public Color MatchCurrentColor(){
     Color detectedColor = m_ColorSensor.getColor();
     ColorMatchResult match = m_ColorMatcher.matchClosestColor(detectedColor);
@@ -104,19 +139,19 @@ public class ColorSensor extends SubsystemBase {
       {
         case 'B' :
           //Blue case code
-          StopPanelWithColor(kBlueTarget);
+          StopPanelWithColor(kRedTarget);
           break;
         case 'G' :
           //Green case code
-          StopPanelWithColor(kGreenTarget);
-          break;
+          StopPanelWithColor(kYellowTarget);
+          break;                                                                                                                                                                                                                                                             
         case 'R' :
           //Red case code
-          StopPanelWithColor(kRedTarget);
+          StopPanelWithColor(kBlueTarget);
           break;
         case 'Y' :
           //Yellow case code
-          StopPanelWithColor(kYellowTarget);
+          StopPanelWithColor(kGreenTarget);
           break;
         default :
           //This is corrupt data
@@ -125,5 +160,9 @@ public class ColorSensor extends SubsystemBase {
     } else {
       //Code for no data received yet
     }
+  }
+
+  public void colorsensorsolenoid(boolean on){
+    m_solenoidcolor.set(on);
   }
 }

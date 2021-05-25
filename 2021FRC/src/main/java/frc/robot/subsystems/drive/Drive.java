@@ -54,7 +54,7 @@ public class Drive extends SubsystemBase {
   public double tx ;
   public double ty ;
 
-  public boolean auto;
+  public boolean auto = false;
   int coast =1;
   int brake = 0;
 
@@ -103,11 +103,13 @@ public class Drive extends SubsystemBase {
 
   public double Get_tx(){
     tx = m_limTable.getEntry("tx").getDouble(0);
+    SmartDashboard.putNumber("tx", tx);
     return tx;
   }
 
   public double Get_ty(){
     ty = m_limTable.getEntry("ty").getDouble(0);
+    SmartDashboard.putNumber("ty", ty);
     return ty;
   }
 
@@ -128,7 +130,7 @@ public class Drive extends SubsystemBase {
 
     /* get gamepad stick values */
     double forw = -1 * x ; /* positive is forward */
-    double turn = +1 * z ; /* positive is right */
+    double turn = +1 * z * 0.7 ; /* positive is right */
 
     /*drive the robot*/
     m_diffDrive.arcadeDrive(forw, turn);
@@ -166,6 +168,22 @@ public void enableMotors(boolean on){
   m_rghtFront.setNeutralMode(mode);
   m_rghtFollower.setNeutralMode(mode);
   //coast++;
+}
+
+public void setFowardLittle(){
+  m_diffDrive.arcadeDrive(0.05 , 0);
+}
+
+public void setBackLittle(){
+  m_diffDrive.arcadeDrive(- 0.05 , 0);
+}
+
+public void setRghtLittle(){
+  m_diffDrive.arcadeDrive(0 , 0.05);
+}
+
+public void setLeftLittle(){
+  m_diffDrive.arcadeDrive(0 , - 0.05);
 }
 
 /**

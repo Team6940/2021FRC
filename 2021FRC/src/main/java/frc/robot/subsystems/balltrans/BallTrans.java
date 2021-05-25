@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.util.Constants;
@@ -19,6 +20,8 @@ public class BallTrans extends SubsystemBase {
   public WPI_VictorSPX m_balltransrght;
 
   public boolean m_balltrans_switch;
+
+  double time = Timer.getFPGATimestamp(); 
 
   public BallTrans() {
     m_balltransleft = Robot.hardware.m_balltransleft;
@@ -52,5 +55,12 @@ public class BallTrans extends SubsystemBase {
   public void SetBallTransBrake(){
     m_balltransleft.setNeutralMode(NeutralMode.Brake);
     m_balltransrght.setNeutralMode(NeutralMode.Brake);
+  }
+
+  public void invertballtrans(){
+    if(time > 3 && time < 6){
+      m_balltransleft.set(ControlMode.PercentOutput,Constants.shooter.Balltrans_Invert_Speed);
+      m_balltransrght.set(ControlMode.PercentOutput,Constants.shooter.Balltrans_Invert_Speed); 
+    }
   }
 }

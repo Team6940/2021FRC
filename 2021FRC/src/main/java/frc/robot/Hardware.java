@@ -55,7 +55,6 @@ public class Hardware {
     public WPI_VictorSPX m_intakeleft;
     public WPI_VictorSPX  m_intakerght;
     public Solenoid m_solenoidleft;
-    public Solenoid m_solenoidrght;
 
     // navX sensor
     public AHRS m_navx;
@@ -64,6 +63,7 @@ public class Hardware {
     public ColorSensorV3 m_ColorSensor; 
     public ColorMatch m_ColorMatcher;
     public WPI_TalonSRX m_colorturner;
+    public Solenoid m_solenoidcolor;
 
     public Hardware(){
 
@@ -90,13 +90,21 @@ public class Hardware {
                 Constants.DriveConstants.kRightEncoderPorts[1],
                 Constants.DriveConstants.kRightEncoderReversed);
         
+
+        m_leftFront.configOpenloopRamp(Constants.Drivebase.Loop_Parameter);
+        m_leftFollower.configOpenloopRamp(Constants.Drivebase.Loop_Parameter);
+        m_rghtFront.configOpenloopRamp(Constants.Drivebase.Loop_Parameter);
+        m_rghtFollower.configOpenloopRamp(Constants.Drivebase.Loop_Parameter);
+        m_leftFront.configClosedloopRamp(Constants.Drivebase.Loop_Parameter);
+        m_leftFollower.configClosedloopRamp(Constants.Drivebase.Loop_Parameter);
+        m_rghtFront.configClosedloopRamp(Constants.Drivebase.Loop_Parameter);
+        m_rghtFollower.configClosedloopRamp(Constants.Drivebase.Loop_Parameter);
+
         /* factory default values */
         //m_rghtFront.configFactoryDefault();
         //m_rghtFollower.configFactoryDefault();
         //m_leftFront.configFactoryDefault();
         //m_leftFollower.configFactoryDefault();
-
-
 
         /* set up followers */
         m_rghtFollower.follow(m_rghtFront);
@@ -123,7 +131,6 @@ public class Hardware {
         m_rghtFollower.configAllSettings(configs);
         m_leftFollower.configAllSettings(configs);
 
-        
         // init encoders
         //m_leftFront.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0,10);
         //m_rghtFront.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0,10);
@@ -160,7 +167,6 @@ public class Hardware {
         m_intakerght.setInverted(Constants.Intake.Is_Intakeright_Inverted);
 
         m_solenoidleft = new Solenoid(Constants.Intake.Left_Solenoid_Port);
-        m_solenoidrght = new Solenoid(Constants.Intake.Right_Solenoid_Port);
 
         //navX
         m_navx = new AHRS(SPI.Port.kMXP);
@@ -169,6 +175,7 @@ public class Hardware {
         m_ColorSensor = new ColorSensorV3(I2C.Port.kOnboard);
         m_ColorMatcher = new ColorMatch();
         m_colorturner = new WPI_TalonSRX(Constants.colorsensor.Tuner_Port);
+        m_solenoidcolor = new Solenoid(Constants.colorsensor.Color_Solenoid_Port);
         
         // odometry
         m_odometry = new DifferentialDriveOdometry(m_navx.getRotation2d());

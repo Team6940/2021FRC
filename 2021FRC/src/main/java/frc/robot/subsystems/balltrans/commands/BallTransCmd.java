@@ -23,7 +23,7 @@ public class BallTransCmd extends CommandBase {
   @Override
   public void execute() {
     double b;
-    b = RobotContainer.m_joystick.getTriggerAxis(GenericHID.Hand.kLeft);
+    b = RobotContainer.m_driverjoystick.getTriggerAxis(GenericHID.Hand.kLeft);
     if(b > 0){
       RobotContainer.m_BallTrans.m_balltrans_switch = true;
     }

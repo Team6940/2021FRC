@@ -5,9 +5,11 @@
 package frc.robot.util;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
@@ -20,19 +22,25 @@ import frc.robot.subsystems.intake.commands.Solenoidin;
 import frc.robot.subsystems.intake.commands.Solenoidout;
 import frc.robot.subsystems.limelight.photonlime;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.commands.InvertShooter;
 import frc.robot.subsystems.shooter.commands.ShootCmd;
+import frc.robot.subsystems.vision.vision;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.balltrans.BallTrans;
 import frc.robot.subsystems.balltrans.commands.BallTransCmd;
+import frc.robot.subsystems.balltrans.commands.InvertBall;
 import frc.robot.subsystems.colorsensor.ColorSensor;
+import frc.robot.subsystems.colorsensor.commands.BackSolenoid;
+import frc.robot.subsystems.colorsensor.commands.PushSolenoid;
 import frc.robot.subsystems.colorsensor.commands.getcolor;
 import frc.robot.subsystems.colorsensor.commands.matchcolor;
 import frc.robot.subsystems.colorsensor.commands.turnpanel;
 import frc.robot.subsystems.drive.*;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -43,18 +51,22 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
 
   //define Joystick
-  public static XboxController m_joystick;
+  public static XboxController m_driverjoystick;
+  public static XboxController m_operatorjoystick;
 
-  //define fast&slow button
-  public static JoystickButton fastButton;
-  public static JoystickButton slowButton;
+  // optimize driving buttons
+  public static POVButton setForwardLittle;
+  public static POVButton setBackLittle;
+  public static POVButton setRghtLittle;
+  public static POVButton setLeftLittle;
 
   // limelight button
   public static JoystickButton limelightButton;
 
   // shooter and balltrans button
-  public static JoystickButton shooterButton;
   public static JoystickButton balltransButton;
+  public static JoystickButton balltransinvert;
+  public static JoystickButton shooterinvert;
 
   // intake button
   public static JoystickButton pushintakebutton;
@@ -64,6 +76,8 @@ public class RobotContainer {
   // color sensor button
   public static JoystickButton matchcolorbutton;
   public static JoystickButton turnpanelbutton;
+  public static POVButton pushcolorsolenoid;
+  public static POVButton backcolorsolenoid;
 
   // The robot's subsystems and commands are defined here...
 
@@ -83,20 +97,45 @@ public class RobotContainer {
   //color sensor
   public static ColorSensor m_colorsensor;
 
+  // USB camera
+  public static vision m_usbcameragroup;
+
+  // Timer
+  public  static Timer m_timer;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
   // set Joystick
-  m_joystick = new XboxController(0);
+  m_driverjoystick = new XboxController(0);
+  m_operatorjoystick = new XboxController(1);
  
   //set Joystick buttons
   //fastButton = new JoystickButton(m_driverjoystick, 3);
   //slowButton = new JoystickButton(m_driverjoystick, 4);
-  limelightButton = new JoystickButton(m_joystick, 4);
-  pushintakebutton = new JoystickButton(m_joystick, 1);
-  backintakebutton = new JoystickButton(m_joystick, 3);
-  ballstartbutton = new JoystickButton(m_joystick, 2);
-  matchcolorbutton = new JoystickButton(m_joystick, 7);
-  turnpanelbutton = new JoystickButton(m_joystick, 8);
+
+  // Driver 2's button
+  limelightButton = new JoystickButton(m_operatorjoystick, 4);
+  pushintakebutton = new JoystickButton(m_operatorjoystick, 1);
+  backintakebutton = new JoystickButton(m_operatorjoystick, 3);
+  ballstartbutton = new JoystickButton(m_operatorjoystick, 2);
+  matchcolorbutton = new JoystickButton(m_operatorjoystick, 7);
+  turnpanelbutton = new JoystickButton(m_operatorjoystick, 8);
+  pushcolorsolenoid = new POVButton(m_operatorjoystick, 0);
+  backcolorsolenoid = new POVButton(m_operatorjoystick, 90);
+
+  //Driver 1's Button
+  balltransinvert = new JoystickButton(m_driverjoystick, 5);
+  shooterinvert = new JoystickButton(m_driverjoystick, 6);
+  setForwardLittle = new POVButton(m_driverjoystick, 0);
+  setRghtLittle = new POVButton(m_driverjoystick, 90);
+  setBackLittle = new POVButton(m_driverjoystick, 180);
+  setLeftLittle = new POVButton(m_driverjoystick, 270);
+
+  //create timer
+  m_timer = new Timer();
+  m_timer.start();
+  double time_cur = m_timer.get();
+  SmartDashboard.putNumber("time_cur", time_cur);
 
   //set subsystems
   m_Drive = new Drive(); 
@@ -104,6 +143,7 @@ public class RobotContainer {
   m_BallTrans = new BallTrans();
   m_intake = new Intake();
   m_colorsensor = new ColorSensor();
+  m_usbcameragroup = new vision();
   
   //Set default command
   m_Drive.setDefaultCommand(new DriveCmd());
@@ -125,14 +165,29 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //fastButton.whenPressed(new setThreshFast());
     //slowButton.whenPressed(new setThreshSlow());
+
+    // Limelight Button
     limelightButton.whenHeld(new photonlime());
+
+    //Color sensor Button
     matchcolorbutton.whenHeld(new matchcolor());
     turnpanelbutton.whenPressed(new turnpanel());
+    pushcolorsolenoid.whenPressed(new PushSolenoid());
+    backcolorsolenoid.whenPressed(new BackSolenoid());;
+
+    // Intake and shooter button
     pushintakebutton.whenPressed(new Solenoidout());
     backintakebutton.whenPressed(new Solenoidin());
     ballstartbutton.whenHeld(new Ballin());
     ballstartbutton.whenReleased(new Ballout());
+    balltransinvert.whenHeld(new InvertBall());
+    shooterinvert.whenHeld(new InvertShooter());
 
+    // Optimize driving button
+    setForwardLittle.whenPressed(new setForwardLittle());
+    setBackLittle.whenPressed(new setBackLittle());
+    setRghtLittle.whenPressed(new setRghtLittle());
+    setLeftLittle.whenPressed(new setLeftLittle());
   }
 
   /**
