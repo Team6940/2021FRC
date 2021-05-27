@@ -9,13 +9,15 @@ import frc.robot.util.RobotContainer;
 import frc.robot.util.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class autoIntakeOn extends CommandBase {
+public class autoForward extends CommandBase {
   int ticks = 0;
   int delayseconds = 0;
-  public autoIntakeOn(int seconds) {
+  double fspeed = 0;
+  public autoForward(double x,int seconds) {
     // Use addRequirements() here to declare subsystem dependencies.
     delayseconds = seconds;
-    addRequirements(RobotContainer.m_intake);
+    fspeed = x;
+    addRequirements(RobotContainer.m_Drive);
   }
 
   // Called when the command is initially scheduled.
@@ -28,9 +30,8 @@ public class autoIntakeOn extends CommandBase {
   @Override
   public void execute() {
     ticks++;
-    //RobotContainer.m_intake.m_intake_switch = true;
-    //RobotContainer.m_intake.OutputIntake();
-    //SmartDashboard.putBoolean("m_intake_switch",RobotContainer.m_intake.m_intake_switch);
+    RobotContainer.m_Drive.drivemode = 0;
+    RobotContainer.m_Drive.DriveCar(fspeed, 0);
   }
 
   // Called once the command ends or is interrupted.
@@ -43,6 +44,8 @@ public class autoIntakeOn extends CommandBase {
   public boolean isFinished() {
     
     if( ticks >= 50*delayseconds ){
+       RobotContainer.m_Drive.DriveCar(0, 0);
+       RobotContainer.m_Drive.enableMotors(true);//刹车
        return true;
     }else {
        return false;
