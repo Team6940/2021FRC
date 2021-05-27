@@ -131,7 +131,7 @@ public class Constants {
     public class shooter{
 
         // motor
-        public static final double ShooterON_Percent_Output = 0.59; //
+        public static final double ShooterON_Percent_Output = 0.52; //
         public static final double ShooterOff_Percent_Output = 0.00;
 
         public static final double Shooter_Invert_Speed = - 0.1;

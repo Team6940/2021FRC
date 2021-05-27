@@ -4,20 +4,26 @@
 
 package frc.robot.util;
 
+import java.util.HashMap;
+import java.util.List;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.subsystems.drive.commands.*;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.BallCmd;
-import frc.robot.subsystems.intake.commands.Ballin;
-import frc.robot.subsystems.intake.commands.Ballout;
+import frc.robot.subsystems.intake.commands.IntakeInvert;
 import frc.robot.subsystems.intake.commands.Solenoidin;
 import frc.robot.subsystems.intake.commands.Solenoidout;
 import frc.robot.subsystems.limelight.photonlime;
@@ -28,12 +34,14 @@ import frc.robot.subsystems.vision.vision;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Robot;
+import frc.robot.auto.autoCmdAll;
 import frc.robot.subsystems.balltrans.BallTrans;
 import frc.robot.subsystems.balltrans.commands.BallTransCmd;
 import frc.robot.subsystems.balltrans.commands.InvertBall;
 import frc.robot.subsystems.colorsensor.ColorSensor;
 import frc.robot.subsystems.colorsensor.commands.BackSolenoid;
 import frc.robot.subsystems.colorsensor.commands.PushSolenoid;
+import frc.robot.subsystems.colorsensor.commands.StopMotor;
 import frc.robot.subsystems.colorsensor.commands.getcolor;
 import frc.robot.subsystems.colorsensor.commands.matchcolor;
 import frc.robot.subsystems.colorsensor.commands.turnpanel;
@@ -72,12 +80,14 @@ public class RobotContainer {
   public static JoystickButton pushintakebutton;
   public static JoystickButton backintakebutton;
   public static JoystickButton ballstartbutton;
+  public static JoystickButton intakeinvertButton;
 
   // color sensor button
   public static JoystickButton matchcolorbutton;
   public static JoystickButton turnpanelbutton;
-  public static POVButton pushcolorsolenoid;
-  public static POVButton backcolorsolenoid;
+  public static JoystickButton pushcolorsolenoid;
+  public static JoystickButton backcolorsolenoid;
+  public static JoystickButton stopcolorsolenoid;
 
   // The robot's subsystems and commands are defined here...
 
@@ -103,6 +113,11 @@ public class RobotContainer {
   // Timer
   public  static Timer m_timer;
 
+  // all path trajectories
+  public static TrajectoryLoader m_TrajectoryLoader;
+  public static HashMap<String, Trajectory> m_trajectories;
+  public static Trajectory m_trajectory;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
   // set Joystick
@@ -114,18 +129,19 @@ public class RobotContainer {
   //slowButton = new JoystickButton(m_driverjoystick, 4);
 
   // Driver 2's button
-  limelightButton = new JoystickButton(m_operatorjoystick, 4);
-  pushintakebutton = new JoystickButton(m_operatorjoystick, 1);
-  backintakebutton = new JoystickButton(m_operatorjoystick, 3);
-  ballstartbutton = new JoystickButton(m_operatorjoystick, 2);
+  shooterinvert = new JoystickButton(m_operatorjoystick, 6);
+  balltransinvert = new JoystickButton(m_operatorjoystick, 5);
   matchcolorbutton = new JoystickButton(m_operatorjoystick, 7);
   turnpanelbutton = new JoystickButton(m_operatorjoystick, 8);
-  pushcolorsolenoid = new POVButton(m_operatorjoystick, 0);
-  backcolorsolenoid = new POVButton(m_operatorjoystick, 90);
+  pushintakebutton = new JoystickButton(m_operatorjoystick, 1);
+  backintakebutton = new JoystickButton(m_operatorjoystick , 3);
+  stopcolorsolenoid = new JoystickButton(m_operatorjoystick, 2);
 
   //Driver 1's Button
-  balltransinvert = new JoystickButton(m_driverjoystick, 5);
-  shooterinvert = new JoystickButton(m_driverjoystick, 6);
+  limelightButton = new JoystickButton(m_driverjoystick, 4);
+  pushcolorsolenoid = new JoystickButton(m_driverjoystick, 6);
+  backcolorsolenoid = new JoystickButton(m_driverjoystick, 5);
+  intakeinvertButton = new JoystickButton(m_driverjoystick, 2);
   setForwardLittle = new POVButton(m_driverjoystick, 0);
   setRghtLittle = new POVButton(m_driverjoystick, 90);
   setBackLittle = new POVButton(m_driverjoystick, 180);
@@ -136,6 +152,9 @@ public class RobotContainer {
   m_timer.start();
   double time_cur = m_timer.get();
   SmartDashboard.putNumber("time_cur", time_cur);
+  m_TrajectoryLoader = new TrajectoryLoader();
+  m_trajectories = m_TrajectoryLoader.loadTrajectories();
+  m_trajectory = getDefaultTrajectory();
 
   //set subsystems
   m_Drive = new Drive(); 
@@ -151,6 +170,7 @@ public class RobotContainer {
   m_BallTrans.setDefaultCommand(new BallTransCmd());
   m_colorsensor.setDefaultCommand(new getcolor());
   m_intake.setDefaultCommand(new BallCmd());
+
   // Configure the button bindings
 
     configureButtonBindings();
@@ -174,20 +194,73 @@ public class RobotContainer {
     turnpanelbutton.whenPressed(new turnpanel());
     pushcolorsolenoid.whenPressed(new PushSolenoid());
     backcolorsolenoid.whenPressed(new BackSolenoid());;
+    stopcolorsolenoid.whenPressed(new StopMotor());
 
     // Intake and shooter button
-    pushintakebutton.whenPressed(new Solenoidout());
-    backintakebutton.whenPressed(new Solenoidin());
-    ballstartbutton.whenHeld(new Ballin());
-    ballstartbutton.whenReleased(new Ballout());
+    pushintakebutton.whenHeld(new Solenoidout());
+    backintakebutton.whenHeld(new Solenoidin());
+    intakeinvertButton.whenHeld(new IntakeInvert());
+    //ballstartbutton.whenHeld(new Ballin());
+    //ballstartbutton.whenReleased(new Ballout());
     balltransinvert.whenHeld(new InvertBall());
     shooterinvert.whenHeld(new InvertShooter());
 
     // Optimize driving button
-    setForwardLittle.whenPressed(new setForwardLittle());
-    setBackLittle.whenPressed(new setBackLittle());
-    setRghtLittle.whenPressed(new setRghtLittle());
-    setLeftLittle.whenPressed(new setLeftLittle());
+    setForwardLittle.whenHeld(new setForwardLittle());
+    setForwardLittle.whenReleased(new setLittleOff());
+    setBackLittle.whenHeld(new setBackLittle());
+    setBackLittle.whenReleased(new setLittleOff());
+    setRghtLittle.whenHeld(new setRghtLittle());
+    setRghtLittle.whenReleased(new setLittleOff());
+    setLeftLittle.whenHeld(new setLeftLittle());
+    setLeftLittle.whenReleased(new setLittleOff());
+    //setOptimizeButton1.whenHeld(new setModeTrue());
+    //setOptimizeButton2.whenReleased(new setModeFalse());
+  }
+
+    /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    return new autoCmdAll();
+ }
+
+  public Trajectory getDefaultTrajectory(){
+    Trajectory trajectory;
+   // Create a voltage constraint to ensure we don't accelerate too fast
+    var autoVoltageConstraint =
+        new DifferentialDriveVoltageConstraint(
+            new SimpleMotorFeedforward(
+                Constants.DriveConstants.ksVolts,
+                Constants.DriveConstants.kvVoltSecondsPerMeter,
+                Constants.DriveConstants.kaVoltSecondsSquaredPerMeter),
+                Constants.DriveConstants.kDriveKinematics,
+            10);
+
+    // Create config for trajectory
+    TrajectoryConfig config =
+        new TrajectoryConfig(
+                Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+                Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(Constants.DriveConstants.kDriveKinematics)
+            // Apply the voltage constraint
+            .addConstraint(autoVoltageConstraint);
+
+    // An example trajectory to follow.  All units in meters.
+    trajectory = TrajectoryGenerator.generateTrajectory(
+            // Start at the origin facing the +X direction
+            new Pose2d(0, 0, new Rotation2d(0)),
+            // Pass through these two interior waypoints, making an 's' curve path
+            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            // End 3 meters straight ahead of where we started, facing forward
+            new Pose2d(3, 0, new Rotation2d(0)),
+            // Pass config
+            config);
+      return trajectory;
+
   }
 
   /**
@@ -195,7 +268,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  public Command getAutonomousCommand_old() {
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(

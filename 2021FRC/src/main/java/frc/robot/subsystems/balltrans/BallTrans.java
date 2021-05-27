@@ -58,9 +58,7 @@ public class BallTrans extends SubsystemBase {
   }
 
   public void invertballtrans(){
-    if(time > 3 && time < 6){
       m_balltransleft.set(ControlMode.PercentOutput,Constants.shooter.Balltrans_Invert_Speed);
       m_balltransrght.set(ControlMode.PercentOutput,Constants.shooter.Balltrans_Invert_Speed); 
-    }
   }
 }

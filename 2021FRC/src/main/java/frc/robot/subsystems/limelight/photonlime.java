@@ -5,6 +5,7 @@
 package frc.robot.subsystems.limelight;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
@@ -21,14 +22,14 @@ public class photonlime extends CommandBase {
   final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(60);
       
   // How far from the target we want to be
-  final double GOAL_RANGE_METERS = Units.feetToMeters(3);
+  final double GOAL_RANGE_METERS = Units.feetToMeters(3/0.3048);
 
   // PID constants should be tuned per robot
-  final double LINEAR_P = 0.1;
+  final double LINEAR_P = 0.28;
   final double LINEAR_D = 0.0;
   PIDController forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
   
-  final double ANGULAR_P = 0.1;
+  final double ANGULAR_P = 0.06;
   final double ANGULAR_D = 0.0;
   PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
   
@@ -63,10 +64,19 @@ public class photonlime extends CommandBase {
                         TARGET_HEIGHT_METERS,
                         CAMERA_PITCH_RADIANS,
                         Units.degreesToRadians(RobotContainer.m_Drive.Get_ty()));
-
+        SmartDashboard.putNumber("range", range);
         // Use this range as the measurement we give to the PID controller.
         // -1.0 required to ensure positive PID controller effort _increases_ range
-        forwardSpeed = -1.0 * forwardController.calculate(range, GOAL_RANGE_METERS);
+        if(RobotContainer.m_Drive.Get_ty()<-1){
+          forwardSpeed = 1.0 * forwardController.calculate(range, GOAL_RANGE_METERS);;
+        }
+        else if(RobotContainer.m_Drive.Get_ty() > 1){
+          forwardSpeed = -1.0 * forwardController.calculate(range, GOAL_RANGE_METERS);
+        }
+        else{
+          forwardSpeed = 0;
+        }
+
 
         // Also calculate angular power
         // -1.0 required to ensure positive PID controller effort _increases_ yaw

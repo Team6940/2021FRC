@@ -59,6 +59,7 @@ public class ColorSensor extends SubsystemBase {
 
   public void StopMotor(){
     m_colorturner.setNeutralMode(NeutralMode.Brake);
+    m_colorturner.set(0);
   }
 
   public void GetColor(){

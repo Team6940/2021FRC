@@ -57,6 +57,8 @@ public class Drive extends SubsystemBase {
   public boolean auto = false;
   int coast =1;
   int brake = 0;
+  public int drivemode;
+  public boolean mode = false;
 
   //navX
   public AHRS m_ahrs;
@@ -133,7 +135,23 @@ public class Drive extends SubsystemBase {
     double turn = +1 * z * 0.7 ; /* positive is right */
 
     /*drive the robot*/
-    m_diffDrive.arcadeDrive(forw, turn);
+    if(drivemode == 1){
+      m_diffDrive.arcadeDrive(0.1 , 0);
+    }
+    else if(drivemode == 2){
+      m_diffDrive.arcadeDrive(- 0.1 , 0);
+    }
+    else if(drivemode == 3){
+      m_diffDrive.arcadeDrive(0 , 0.1);
+    }
+    else if(drivemode == 4){
+      m_diffDrive.arcadeDrive(0 , - 0.1);
+    }
+    else{
+      m_diffDrive.arcadeDrive(forw, turn);
+    }
+    SmartDashboard.putNumber("drivemode", drivemode);
+
 
 }
 

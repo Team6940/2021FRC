@@ -52,4 +52,8 @@ public class Intake extends SubsystemBase {
       IntakeWithPower(Constants.Intake.Intake_Stop_Speed);
     }
   }
+
+  public void invertintake(){
+    IntakeWithPower(Constants.Intake.Intake_Invert_Speed);
+  }
 }

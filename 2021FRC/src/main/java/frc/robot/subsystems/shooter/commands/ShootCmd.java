@@ -24,7 +24,7 @@ public class ShootCmd extends CommandBase {
   @Override
   public void execute() {
     double a = 0;
-    a = RobotContainer.m_driverjoystick.getTriggerAxis(GenericHID.Hand.kRight);
+    a = RobotContainer.m_operatorjoystick.getTriggerAxis(GenericHID.Hand.kRight);
     SmartDashboard.putNumber("a", a);
     if(a > 0){
       RobotContainer.m_Shooter.m_shooter_switch = true;

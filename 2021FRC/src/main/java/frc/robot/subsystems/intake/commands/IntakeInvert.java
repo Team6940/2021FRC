@@ -22,7 +22,7 @@ public class IntakeInvert extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.m_intake.IntakeWithPower(Constants.Intake.Intake_Invert_Speed);
+    RobotContainer.m_intake.invertintake();
   }
 
   // Called once the command ends or is interrupted.
