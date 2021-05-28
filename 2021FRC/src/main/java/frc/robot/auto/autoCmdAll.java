@@ -33,7 +33,7 @@ public class autoCmdAll extends SequentialCommandGroup {
     //step7.auto drive back to INITIATION LINE.
     //step8.stop all motors.
     Trajectory Trajectory1 = RobotContainer.m_trajectories.get("intakeThreeBalls");
-    Trajectory Trajectory2 = RobotContainer.m_trajectories.get("deploy/output/straightline.wpilib.json");
+    Trajectory Trajectory2 = RobotContainer.m_trajectories.get("straightline");
     // RobotContainer.getDefaultTrajectory 获取的固定路径，如果需要编辑请去定义处手动修改
     Trajectory Trajectory3 = RobotContainer.m_trajectory;
     RamseteCommand ramseteCommand =

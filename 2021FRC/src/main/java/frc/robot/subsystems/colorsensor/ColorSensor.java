@@ -66,12 +66,16 @@ public class ColorSensor extends SubsystemBase {
     detectedColor = m_ColorSensor.getColor();
   }
 
-  public void StopPanelWithColor(Color color){
+  public boolean StopPanelWithColor(Color color){
+    
+    boolean result = false;
     GetColor();
     ColorMatchResult match = m_ColorMatcher.matchClosestColor(detectedColor);
     if(match.color == color){
       StopMotor();
+      result = true;
     }
+    return result;
   }
 
   public boolean isColorChanged(Color TargetColor){
@@ -120,7 +124,7 @@ public class ColorSensor extends SubsystemBase {
 
   }
 
-  public void MatchColor(){
+  public boolean MatchColor(){
     /**
      * The method GetColor() returns a normalized color value from the sensor and can be
      * useful if outputting the color to an RGB LED or similar. To
@@ -131,7 +135,7 @@ public class ColorSensor extends SubsystemBase {
      * an object is the more light from the surroundings will bleed into the 
      * measurements and make it difficult to accurately determine its color.
      */
-
+    boolean result = false;
     String gameData;
     gameData = DriverStation.getInstance().getGameSpecificMessage();
     if(gameData.length() > 0)
@@ -140,19 +144,19 @@ public class ColorSensor extends SubsystemBase {
       {
         case 'B' :
           //Blue case code
-          StopPanelWithColor(kRedTarget);
+          result = StopPanelWithColor(kRedTarget);
           break;
         case 'G' :
           //Green case code
-          StopPanelWithColor(kYellowTarget);
+          result = StopPanelWithColor(kYellowTarget);
           break;                                                                                                                                                                                                                                                             
         case 'R' :
           //Red case code
-          StopPanelWithColor(kBlueTarget);
+          result = StopPanelWithColor(kBlueTarget);
           break;
         case 'Y' :
           //Yellow case code
-          StopPanelWithColor(kGreenTarget);
+          result = StopPanelWithColor(kGreenTarget);
           break;
         default :
           //This is corrupt data
@@ -161,6 +165,7 @@ public class ColorSensor extends SubsystemBase {
     } else {
       //Code for no data received yet
     }
+    return result;
   }
 
   public void colorsensorsolenoid(boolean on){

@@ -136,16 +136,16 @@ public class Drive extends SubsystemBase {
 
     /*drive the robot*/
     if(drivemode == 1){
-      m_diffDrive.arcadeDrive(0.1 , 0);
+      m_diffDrive.arcadeDrive(0.2 , 0);
     }
     else if(drivemode == 2){
-      m_diffDrive.arcadeDrive(- 0.1 , 0);
+      m_diffDrive.arcadeDrive(- 0.2 , 0);
     }
     else if(drivemode == 3){
-      m_diffDrive.arcadeDrive(0 , 0.1);
+      m_diffDrive.arcadeDrive(0 , 0.2);
     }
     else if(drivemode == 4){
-      m_diffDrive.arcadeDrive(0 , - 0.1);
+      m_diffDrive.arcadeDrive(0 , - 0.2);
     }
     else{
       m_diffDrive.arcadeDrive(forw, turn);
@@ -189,19 +189,19 @@ public void enableMotors(boolean on){
 }
 
 public void setFowardLittle(){
-  m_diffDrive.arcadeDrive(0.05 , 0);
+  m_diffDrive.arcadeDrive(0.2 , 0);
 }
 
 public void setBackLittle(){
-  m_diffDrive.arcadeDrive(- 0.05 , 0);
+  m_diffDrive.arcadeDrive(- 0.2 , 0);
 }
 
 public void setRghtLittle(){
-  m_diffDrive.arcadeDrive(0 , 0.05);
+  m_diffDrive.arcadeDrive(0 , 0.2);
 }
 
 public void setLeftLittle(){
-  m_diffDrive.arcadeDrive(0 , - 0.05);
+  m_diffDrive.arcadeDrive(0 , - 0.2);
 }
 
 /**

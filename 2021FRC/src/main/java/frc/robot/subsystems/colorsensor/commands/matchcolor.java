@@ -5,10 +5,12 @@
 package frc.robot.subsystems.colorsensor.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.util.Constants;
 import frc.robot.util.RobotContainer;
 
 public class matchcolor extends CommandBase {
   /** Creates a new matchcolor. */
+  boolean result  = false;
   public matchcolor() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.m_colorsensor);
@@ -21,7 +23,9 @@ public class matchcolor extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.m_colorsensor.MatchColor();
+    RobotContainer.m_colorsensor.putcolor();
+    RobotContainer.m_colorsensor.MotorWithPower(Constants.colorsensor.turner_power);
+    result = RobotContainer.m_colorsensor.MatchColor();
   }
 
   // Called once the command ends or is interrupted.
@@ -31,6 +35,6 @@ public class matchcolor extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return result;
   }
 }

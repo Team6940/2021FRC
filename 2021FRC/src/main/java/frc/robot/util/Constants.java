@@ -20,7 +20,7 @@ public class Constants {
         public static final int DRIVE_R2_PORT = 4;
         
         // initial speed
-        public static final double Initial_Speed = 0.5;
+        public static final double Initial_Speed = 1.0;
 
         // "soft boot" parameter
         public static final double Loop_Parameter = 0.6;

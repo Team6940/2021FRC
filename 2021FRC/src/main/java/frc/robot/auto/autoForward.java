@@ -30,8 +30,7 @@ public class autoForward extends CommandBase {
   @Override
   public void execute() {
     ticks++;
-    RobotContainer.m_Drive.drivemode = 0;
-    RobotContainer.m_Drive.DriveCar(fspeed, 0);
+    RobotContainer.m_Drive.tankDriveVolts(fspeed, fspeed);
   }
 
   // Called once the command ends or is interrupted.
@@ -44,8 +43,7 @@ public class autoForward extends CommandBase {
   public boolean isFinished() {
     
     if( ticks >= 50*delayseconds ){
-       RobotContainer.m_Drive.DriveCar(0, 0);
-       RobotContainer.m_Drive.enableMotors(true);//刹车
+      RobotContainer.m_Drive.tankDriveVolts(0, 0);
        return true;
     }else {
        return false;
