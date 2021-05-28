@@ -64,7 +64,7 @@ public class Drive extends SubsystemBase {
   public AHRS m_ahrs;
 
   //Speed threshold
-  double speed1 =  0.5;
+  double speed1 =  1;
 
   public Drive() {
     //here is todo

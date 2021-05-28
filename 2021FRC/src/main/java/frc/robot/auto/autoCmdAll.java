@@ -63,7 +63,7 @@ public class autoCmdAll extends SequentialCommandGroup {
           ),
         new autoShooterStop(0),
               //ramseteCommand.andThen(() -> RobotContainer.m_Drive.tankDriveVolts(0, 0))
-        new autoForward(0.8,3)
+        new autoForward(10 ,3)
                //new FollowTrajectoryCommand(Trajectory2, RobotContainer.m_Drive)
             
             );
