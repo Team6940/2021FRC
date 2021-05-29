@@ -59,11 +59,11 @@ public class autoCmdAll extends SequentialCommandGroup {
         new ParallelCommandGroup(  //三个命令并行执行
           new autoShootOn(3), // 参数表示命令执行延时多少秒
           new autoBallTransOn(3),// 参数表示命令执行延时多少秒
-          new autoIntakeOn(3)// 参数表示命令执行延时多少秒
+          new autoIntakeOn(2)// 参数表示命令执行延时多少秒
           ),
         new autoShooterStop(0),
               //ramseteCommand.andThen(() -> RobotContainer.m_Drive.tankDriveVolts(0, 0))
-        new autoForward(10 ,3)
+        new autoForward(3 ,2)
                //new FollowTrajectoryCommand(Trajectory2, RobotContainer.m_Drive)
             
             );

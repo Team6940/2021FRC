@@ -64,7 +64,7 @@ public class Drive extends SubsystemBase {
   public AHRS m_ahrs;
 
   //Speed threshold
-  double speed1 =  1;
+  double speed1 =  0.5;
 
   public Drive() {
     //here is todo
@@ -136,16 +136,16 @@ public class Drive extends SubsystemBase {
 
     /*drive the robot*/
     if(drivemode == 1){
-      m_diffDrive.arcadeDrive(0.2 , 0);
+      tankDriveVolts(1.2 , - 1.2);
     }
     else if(drivemode == 2){
-      m_diffDrive.arcadeDrive(- 0.2 , 0);
+      tankDriveVolts(- 1.2 , 1.2);
     }
     else if(drivemode == 3){
-      m_diffDrive.arcadeDrive(0 , 0.2);
+      tankDriveVolts(- 1.2 , - 1.2);
     }
     else if(drivemode == 4){
-      m_diffDrive.arcadeDrive(0 , - 0.2);
+      tankDriveVolts(1.2 , 1.2);
     }
     else{
       m_diffDrive.arcadeDrive(forw, turn);

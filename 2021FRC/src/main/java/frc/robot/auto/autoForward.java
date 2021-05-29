@@ -30,7 +30,7 @@ public class autoForward extends CommandBase {
   @Override
   public void execute() {
     ticks++;
-    RobotContainer.m_Drive.tankDriveVolts(fspeed, fspeed);
+    RobotContainer.m_Drive.tankDriveVolts(-fspeed, fspeed);
   }
 
   // Called once the command ends or is interrupted.
