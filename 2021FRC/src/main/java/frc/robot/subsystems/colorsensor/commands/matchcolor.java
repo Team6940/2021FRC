@@ -24,7 +24,7 @@ public class matchcolor extends CommandBase {
   @Override
   public void execute() {
     RobotContainer.m_colorsensor.putcolor();
-    RobotContainer.m_colorsensor.MotorWithPower(Constants.colorsensor.turner_power);
+    RobotContainer.m_colorsensor.MotorWithPower(Constants.colorsensor.match_color_power);
     result = RobotContainer.m_colorsensor.MatchColor();
   }
 

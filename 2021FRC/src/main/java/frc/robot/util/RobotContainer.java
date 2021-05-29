@@ -171,6 +171,8 @@ public class RobotContainer {
   m_colorsensor.setDefaultCommand(new getcolor());
   m_intake.setDefaultCommand(new BallCmd());
 
+  m_Drive.setLightMode(1);
+
   // Configure the button bindings
 
     configureButtonBindings();

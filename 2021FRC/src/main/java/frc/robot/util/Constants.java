@@ -181,7 +181,8 @@ public class Constants {
 
     public class colorsensor{
         public static final int Tuner_Port = 11;
-        public static final double turner_power = 0.5;
+        public static final double turn_panel_power = 1;
+        public static final double match_color_power = 0.5;
         public static final int Color_Solenoid_Port = 1;
     }
 

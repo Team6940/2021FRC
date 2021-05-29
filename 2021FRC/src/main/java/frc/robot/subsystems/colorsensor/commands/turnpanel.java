@@ -36,7 +36,7 @@ public class turnpanel extends CommandBase {
   @Override
   public void execute() {
     RobotContainer.m_colorsensor.putcolor();
-    RobotContainer.m_colorsensor.MotorWithPower(Constants.colorsensor.turner_power);
+    RobotContainer.m_colorsensor.MotorWithPower(Constants.colorsensor.turn_panel_power);
     boolean changeColor = false;
     curColor = RobotContainer.m_colorsensor.MatchCurrentColor();
     if( firstFlag == 0){

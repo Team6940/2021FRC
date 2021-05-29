@@ -44,6 +44,7 @@ public class photonlime extends CommandBase {
     //m_camera.setDriverMode(true);
     //m_camera.setLED(LEDMode.kOn);
     RobotContainer.m_Drive.auto = true;
+    RobotContainer.m_Drive.setLightMode(3);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -95,7 +96,9 @@ public class photonlime extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    RobotContainer.m_Drive.setLightMode(1);
+  }
 
   // Returns true when the command should end.
   @Override

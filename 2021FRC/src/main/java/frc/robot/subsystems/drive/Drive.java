@@ -64,7 +64,7 @@ public class Drive extends SubsystemBase {
   public AHRS m_ahrs;
 
   //Speed threshold
-  double speed1 =  0.5;
+  double speed1 =  0.75;
 
   public Drive() {
     //here is todo
@@ -132,7 +132,7 @@ public class Drive extends SubsystemBase {
 
     /* get gamepad stick values */
     double forw = -1 * x ; /* positive is forward */
-    double turn = +1 * z * 0.7 ; /* positive is right */
+    double turn = +1 * z * 0.47 ; /* positive is right */
 
     /*drive the robot*/
     if(drivemode == 1){
