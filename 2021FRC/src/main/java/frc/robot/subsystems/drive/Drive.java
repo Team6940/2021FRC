@@ -132,7 +132,7 @@ public class Drive extends SubsystemBase {
 
     /* get gamepad stick values */
     double forw = -1 * x ; /* positive is forward */
-    double turn = +1 * z * 0.47 ; /* positive is right */
+    double turn = +1 * z * 0.65 ; /* positive is right */
 
     /*drive the robot*/
     if(drivemode == 1){
